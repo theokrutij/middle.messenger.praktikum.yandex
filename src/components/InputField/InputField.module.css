@@ -1,0 +1,36 @@
+.inputField {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	h6 {
+		text-align: left;
+		font-size: 12px;
+	}
+
+	.inner {
+		display: flex;
+		align-items: center;
+
+		max-width: 500px;
+		border: 1px black solid;
+		padding: 0 8px;
+
+		input {
+			height: 46px;
+			font-size: 16px;
+			border: none;
+			outline: none;
+			flex: 1;
+		}
+
+		button {
+			height: 30px;
+			border: none;
+			padding: 0;
+			background: none;
+		}
+
+	}
+}
+
