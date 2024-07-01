@@ -1,6 +1,6 @@
-import { LoginPage } from "./pages/login.tmpl";
-import { SignupPage } from "./pages/signup.tmpl";
-import { MainPage } from "./pages/main.tmpl";
+import { LoginPage } from "./pages/login/login.tmpl";
+import { SignupPage } from "./pages/signup/signup.tmpl";
+import { MainPage } from "./pages/main/main.tmpl";
 import { Template, props } from "./types";
 import "./global.css";
 
