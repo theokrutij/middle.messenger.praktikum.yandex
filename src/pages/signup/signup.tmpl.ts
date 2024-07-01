@@ -1,5 +1,7 @@
-import { InputField } from "../../components/InputField/InputField.tmpl"
+import { InputField } from "../../components/InputField/InputField.tmpl";
 import { Template } from "../../types";
+
+import classes from "./signup.module.css";
 
 type signUpProps = {
 	returnToSignIn: () => void;
@@ -40,12 +42,16 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 
 	const template = 
 		`
-		<div>
+		<div class=${classes.signupPage}>
 			<h1>Create new profile</h1>
 			<form action="submit">
-				${inputFields.map(([template]) => template).join("\n")}
-				<button id="continue">Continue</button>
-				<button id="return">Return to sign in</button>
+				<div class=${classes.fields}>
+						${inputFields.map(([template]) => template).join("\n")}
+				</div>
+				<div class=${classes.controls}>
+					<button id="continue">Continue</button>
+					<button id="return">Return to sign in</button>
+				</div>
 			</form>
 		</div>
 		`

@@ -1,6 +1,8 @@
 import { InputField } from "../../components/InputField/InputField.tmpl";
 import { Template } from "../../types";
 
+import classes from "./login.module.css";
+
 
 type loginPageProps = {
 	goToMain: () => void,
@@ -27,12 +29,16 @@ export const LoginPage: Template<loginPageProps> = ({goToMain, goToSignUp}: logi
 
 	const template = 
 		`
-		<div>
+		<div class=${classes.loginPage}>
 			<h1>Welcome to Chat Noir!</h1>
 			<form action="submit">
-				${(inputFields.map(([template]) => template)).join("\n")}
-				<button id="signIn">Sign in</button>
-				<button id="signUp">Create account</button>
+				<div class=${classes.fields}>
+					${(inputFields.map(([template]) => template)).join("\n")}
+				</div>
+				<div class=${classes.controls}>
+					<button id="signIn">Sign in</button>
+					<button id="signUp">Create account</button>
+				</div>
 			</form>
 		</div>
 		`
