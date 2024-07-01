@@ -75,3 +75,24 @@ document.addEventListener(
 		}
 	}
 );
+
+window.addEventListener(
+	"popstate",
+	(event) => {
+		if (event.state && "page" in event.state) {
+			switch (event.state["page"]) {
+				case "main":
+					renderMainPage();
+					break;
+				case "signup":
+					renderSignUpPage();
+					break;
+				default:
+					renderLogInPage();
+			}
+		}
+		else {
+			renderLogInPage();
+		}
+	}
+);
