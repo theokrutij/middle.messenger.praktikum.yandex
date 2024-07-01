@@ -1,5 +1,5 @@
-import { InputField } from "../components/InputField/InputField.tmpl";
-import { Template } from "../types";
+import { InputField } from "../../components/InputField/InputField.tmpl";
+import { Template } from "../../types";
 
 
 type loginPageProps = {
