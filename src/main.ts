@@ -1,6 +1,6 @@
 import { LoginPage } from "./pages/login.tmpl";
 import { Template } from "./types";
-import "./style.css"
+import "./global.css"
 
 
 function renderPage(page: Template): void {
