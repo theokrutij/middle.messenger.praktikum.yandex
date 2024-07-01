@@ -1,3 +1,4 @@
+import { Template } from "../../types";
 import classes from "./InputField.module.css"
 
 
@@ -8,7 +9,8 @@ type props = {
 
 }
 
-export const InputField = ({inputType, name, id}: props): [string, () => void] => {
+export const InputField: Template<props> = ({label, inputType, name, id, placeholder, required=false}: props)  => {
+	const clearButtonId = id + "_clear";
 	const template = 		
 		`
 		<input type=${inputType} name=${name} id=${id}>
