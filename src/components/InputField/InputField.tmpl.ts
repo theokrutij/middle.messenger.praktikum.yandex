@@ -1,3 +1,6 @@
+import classes from "./InputField.module.css"
+
+
 type props = {
 	inputType: "text" | "password" | "email" | "phone",
 	name: string,
