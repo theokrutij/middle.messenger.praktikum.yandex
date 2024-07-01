@@ -37,8 +37,33 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 			name: "phone", 
 			id: "phone",
 			placeholder: "Enter your phone number..."		
+		}),
+		InputField({
+			label: "Username",
+			inputType: "text",
+			name: "login",
+			id: "login",
+			placeholder: "Enter your username..."
+		}),
+		InputField({
+			label: "Password",
+			inputType: "password",
+			name: "password",
+			id: "password",
+			placeholder: "Enter your password..."
+		}),
+		InputField({
+			label: "Repeat password",
+			inputType: "password",
+			name: "repeat_password",
+			id: "repeat_password",
+			placeholder: "Repeat your password..."
 		})
 	];
+
+	const infoFields = ["first_name", "last_name", "email", "phone"];
+	const credentialFields= ["login", "password", "repeat_password"];
+
 
 	const template = 
 		`
@@ -50,6 +75,7 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 				</div>
 				<div class=${classes.controls}>
 					<button id="continue">Continue</button>
+					<button class="hidden" id="create">Create profile</button>
 					<button id="return">Return to sign in</button>
 				</div>
 			</form>
@@ -57,18 +83,32 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 		`
 	;
 
+
+
+
 	const handleContinueClick = (event: MouseEvent) => {
 		event.preventDefault();
-		confirmCreate();
 
-	}
+		infoFields.map((id) => {
+			toggleHidden(`${id}_field`);
+		});
+		credentialFields.map((id) => {
+			toggleHidden(`${id}_field`);
+		});
 
-
+		toggleHidden("continue");
+		toggleHidden("create");
+	};
 
 	const handleReturnClick = (event: MouseEvent) => {
 		event.preventDefault();
 		returnToSignIn();
-	}
+	};
+
+	const handleCreateClick = (event: MouseEvent) => {
+		event.preventDefault();
+		confirmCreate();
+	};
 
 
 	const onLoad = () => {
@@ -79,10 +119,17 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 		});
 
 		const continueButton = <HTMLButtonElement>document.querySelector("#continue");
-		continueButton.addEventListener("click", handleContinueClick)
+		continueButton.addEventListener("click", handleContinueClick);
 
 		const returnButton = <HTMLButtonElement>document.querySelector("#return");
 		returnButton.addEventListener("click", handleReturnClick);
+
+		const createButton =<HTMLButtonElement>document.querySelector("#create");
+		createButton.addEventListener("click", handleCreateClick);
+
+		credentialFields.map((id) => {
+			toggleHidden(`${id}_field`);		
+		});
 	};
 
 	const onUnload = () => {
@@ -97,6 +144,15 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 
 		const returnButton = <HTMLButtonElement>document.querySelector("#return");
 		returnButton.removeEventListener("click", handleReturnClick);
-	}
+
+		const createButton =<HTMLButtonElement>document.querySelector("#create");
+		createButton.removeEventListener("click", handleCreateClick);
+	}	
 	return [template, onLoad, onUnload];
+}
+
+
+const toggleHidden = (id: string) => {
+	const elem = <HTMLElement>document.querySelector(`#${id}`);
+	elem.classList.toggle("hidden");
 }
