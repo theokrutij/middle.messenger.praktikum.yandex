@@ -1,11 +1,28 @@
-import { InputField } from "../components/InputField.tmpl"
+import { InputField } from "../components/InputField/InputField.tmpl";
 import { Template } from "../types";
 
 
-export const LoginPage: Template = () =>  {
+type loginPageProps = {
+	goToMain: () => void,
+	goToSignUp: () => void
+}
+
+export const LoginPage: Template<loginPageProps> = ({goToMain, goToSignUp}: loginPageProps) =>  {
 	const inputFields = [
-		InputField({inputType: "text", name: "login", id: "loginField"}),
-		InputField({inputType: "password", name: "password", id: "passwordField"})
+		InputField({
+				label: "Login", 
+				inputType: "text", 
+				name: "login", 
+				id: "login", 
+				placeholder: "Enter your login..."
+		}),
+		InputField({
+				label: "Password", 
+				inputType: "password", 
+				name: "password", 
+				id: "password", 
+				placeholder: "Enter your password..."
+		})
 	];
 
 	const template = 
@@ -14,19 +31,55 @@ export const LoginPage: Template = () =>  {
 			<h1>Welcome to Chat Noir!</h1>
 			<form action="submit">
 				${(inputFields.map(([template]) => template)).join("\n")}
-				<button>Sign in</button>
-				<button>Create account</button>
+				<button id="signIn">Sign in</button>
+				<button id="signUp">Create account</button>
 			</form>
 		</div>
 		`
 	;
 
+	const handleSignInClick = (event: MouseEvent) => {
+		event.preventDefault();
+		goToMain();
+	} 
+
+
+	const handleSignUpClick = (event: MouseEvent) => {
+		event.preventDefault();
+		goToSignUp();
+	}
+
 	const onLoad = () => {
-		inputFields.map(([,onload]) => onload());
-		(<HTMLInputElement>document.querySelector("#loginField")).focus()
+		inputFields.map(([,onLoad]) => {
+			if (onLoad !== undefined) {
+				onLoad();
+			}
+		});
+
+		const signInButton = <HTMLButtonElement>document.querySelector("#signIn");
+		signInButton.addEventListener("click", handleSignInClick);
+		
+		const signUpButton = <HTMLButtonElement>document.querySelector("#signUp");
+		signUpButton.addEventListener("click", handleSignUpClick);
+		
+		(<HTMLInputElement>document.querySelector("#login")).focus();
 	};
 
-	return [template, onLoad];
+	const onUnload = () => {
+		inputFields.map(([,,onUnload]) => {
+			if (onUnload !== undefined) {
+				onUnload();
+			}
+		});
+
+		const signInButton = <HTMLButtonElement>document.querySelector("#signIn");
+		signInButton.removeEventListener("click", handleSignInClick);
+
+		const signUpButton = <HTMLButtonElement>document.querySelector("#signUp");
+		signUpButton.removeEventListener("click", handleSignUpClick);
+	}
+
+	return [template, onLoad, onUnload];
 }
 
 
