@@ -12,8 +12,19 @@ type props = {
 export const InputField: Template<props> = ({label, inputType, name, id, placeholder, required=false}: props)  => {
 	const clearButtonId = id + "_clear";
 	const template = 		
-		`
-		<input type=${inputType} name=${name} id=${id}>
+		`<div class=${classes.inputField} id=${id + "_field"}>
+			<h6>${label}</h6>
+			<div class=${classes.inner}>
+				<input  
+					type="${inputType}" 
+					name="${name}" 
+					id="${id}" 
+					placeholder="${placeholder}" 
+					${required ? "required": ""}
+				/>
+				<button class="hidden" id=${id + "_clear"}><img src="/clear.svg" alt="clearButton"></button>
+			</div>
+		</div>
 		`
 	;
 	const onload = () => {};
