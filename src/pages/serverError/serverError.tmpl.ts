@@ -10,11 +10,16 @@ export const serverErrorPage: Template<{}> = () => {
 			<h1>500</h1>
 			<h2>Something went wrong</h2>
 			<p>Please refresh the page or \n
-			<a href="">contact us</a> if the issue persists</p>
+			<a id="contactLink" href="">contact us</a> if the issue persists</p>
 		</div>
 
 	`
 	;
 
-	return [template]
+	const onLoad = () => {
+		const contactLink = <HTMLAnchorElement>document.querySelector("#contactLink");
+		contactLink.addEventListener("click", (event) => event.preventDefault());
+	};
+
+	return [template, onLoad]
 }
