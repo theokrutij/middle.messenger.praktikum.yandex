@@ -7,19 +7,27 @@ import { Template, props } from "./types";
 
 import "./global.css";
 
-
-const state = {
-	onUnload: () => {}
+enum Pages {
+	login = "/login",
+	signup = "/signup",
+	main = "/",
+	notFound = "/404",
+	serverError = "/500"
 };
 
-const renderPage = <T extends props>(page: Template<T>, props: T) => {
-	state.onUnload();
+const state = {
+	currentPage: Pages.login,
+	unloadPreviousPage: () => {}
+};
+
+const loadTemplate = <T extends props>(page: Template<T>, props: T) => {
+	state.unloadPreviousPage();
 	const [pageHTML, onLoad, onUnload] = page(props);
 	if (onUnload !== undefined) {
-		state.onUnload = onUnload;
+		state.unloadPreviousPage = onUnload;
 	}
 	else {
-		state.onUnload = () => {}
+		state.unloadPreviousPage = () => {}
 	}
 	document.querySelector<HTMLDivElement>("#app")!.innerHTML = pageHTML;
 
@@ -28,92 +36,108 @@ const renderPage = <T extends props>(page: Template<T>, props: T) => {
 	}
 }
 
-
 const renderLogInPage = () => {
-	window.history.pushState({page: "login"}, "", "/login");
-	renderPage(
+	loadTemplate(
 		LoginPage, 
 		{
-			goToSignUp: renderSignUpPage,
-			goToMain: renderMainPage
+			goToSignUp: () => navigateToPage(Pages.signup),
+			goToMain: () => navigateToPage(Pages.main)
 		}
 	);
 	// window.location.href = "/login";
 };
 const renderSignUpPage = () => {
-	window.history.pushState({page: "signup"}, "", "/signup");
-	renderPage(
+	loadTemplate(
 		SignupPage, 
 		{
-			returnToSignIn: renderLogInPage, 
-			confirmCreate: renderMainPage
+			returnToSignIn: () => navigateToPage(Pages.login),
+			confirmCreate: () => navigateToPage(Pages.main)
 		}
 	);
 };
 const renderMainPage = () => {
-	window.history.pushState({page: "main"}, "", "/");
-	renderPage(
+	loadTemplate(
 		MainPage,
 		{
-			goToLogin: renderLogInPage,
-			goToSignUp: renderSignUpPage,
-			goToError404: renderNotFoundPage,
-			goToError500: renderServerErrorPage
+			goToLogin: () => navigateToPage(Pages.login),
+			goToSignUp: () => navigateToPage(Pages.signup),
+			goToError404: () => navigateToPage(Pages.notFound),
+			goToError500: () => navigateToPage(Pages.serverError),
 		}
 	);
 };
 const renderNotFoundPage = () => {
-	window.history.pushState({page: "error404"}, "", "/404");
-	renderPage(
+	loadTemplate(
 		notFoundPage, 
 		{
-			returnToMainPage: renderMainPage
+			returnToMainPage: () => navigateToPage(Pages.main),
 		}
 	);
 };
 const renderServerErrorPage = () => {
-	window.history.pushState({page: "error500"}, "", "/500");
-	renderPage(serverErrorPage, {});
+	loadTemplate(serverErrorPage, {});
 };
  
+const renderPage = (page: string) => {
+	switch (page) {
+		case Pages.login:
+			renderLogInPage();
+			break;
+		case Pages.signup:
+			renderSignUpPage();
+			break;
+		case Pages.main:
+			renderMainPage();
+			break;
+		case Pages.notFound:
+			renderNotFoundPage();
+			break;
+		case Pages.serverError:
+			renderServerErrorPage();
+			break;
+		default:
+			renderNotFoundPage();
+	}
+}
+
+const navigateToPage = (page: Pages) => {
+	window.history.pushState({page: page}, "", page);
+	renderPage(page);
+	state.currentPage = page;
+};
+
+
 document.addEventListener(
-	"DOMContentLoaded", 
+	"DOMContentLoaded",
 	() => {
-		if (window.history.state !== null && "page" in window.history.state) {
-			switch (window.history.state["page"]) {
-				case "main":
-					renderMainPage();
-					break;
-				case "signup":
-					renderSignUpPage();
-					break;
-				default:
-					renderLogInPage();
-			}
+		const pageInWindowState = window.history.state !== null && "page" in window.history.state;
+		const locationPathIsValidPage = Object.values(Pages).includes(window.location.pathname as Pages);
+		console.log(window.location.pathname, locationPathIsValidPage);
+
+		if (pageInWindowState) {
+			state.currentPage = window.history.state["page"];	
+		}
+		else if (locationPathIsValidPage) {
+			state.currentPage = window.location.pathname as Pages;
 		}
 		else {
-			renderLogInPage();
+			state.currentPage = Pages.notFound;
 		}
+
+		console.log("DOMloaded, current page:", state.currentPage);
+		navigateToPage(state.currentPage);
 	}
 );
 
 window.addEventListener(
-	"popstate",
+	"popstate", 
 	(event) => {
 		if (event.state && "page" in event.state) {
-			switch (event.state["page"]) {
-				case "main":
-					renderMainPage();
-					break;
-				case "signup":
-					renderSignUpPage();
-					break;
-				default:
-					renderLogInPage();
-			}
+			console.log("Got page from event.state:", event.state["page"]);
+			renderPage(event.state["page"]);
 		}
 		else {
-			renderLogInPage();
+			renderPage(Pages.notFound);
 		}
 	}
 );
