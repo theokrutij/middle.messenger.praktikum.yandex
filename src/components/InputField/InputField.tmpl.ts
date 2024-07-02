@@ -3,14 +3,15 @@ import classes from "./InputField.module.css"
 
 
 type props = {
+	label: string,
 	inputType: "text" | "password" | "email" | "phone",
 	name: string,
-	id: string
-
+	id: string,
+	placeholder: string,
+	required?: boolean
 }
 
 export const InputField: Template<props> = ({label, inputType, name, id, placeholder, required=false}: props)  => {
-	const clearButtonId = id + "_clear";
 	const template = 		
 		`<div class=${classes.inputField} id=${id + "_field"}>
 			<h6>${label}</h6>
