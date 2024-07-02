@@ -18,7 +18,7 @@ export const MainPage: Template<props> = ({
 }: props) => {
 	const template = 
 	`
-		<div class=${classes.page}>
+		<main class=${classes.page}>
 			<p>Main page will be here</p>
 			<nav>
 				<button id="login">Login page</button>
@@ -26,7 +26,7 @@ export const MainPage: Template<props> = ({
 				<button id="error404">404 error page</button>
 				<button id="error500">500 error page</button>
 			</nav>
-		</div>
+		</main>
 	`;
 
 	const onLoad = () => {

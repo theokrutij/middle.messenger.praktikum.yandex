@@ -9,11 +9,11 @@ type props = {
 export const notFoundPage: Template<props> = ({returnToMainPage}: props) => {
 	const template = 
 	`
-		<div class=${classes.page}>
+		<main class=${classes.page}>
 			<h1>404</h1>
 			<h2>Sorry, this page doesn't exist</h2>
 			<button id="return">Return to main page</button>
-		</div>
+		</main>
 	`
 	;
 

@@ -29,7 +29,7 @@ export const LoginPage: Template<loginPageProps> = ({goToMain, goToSignUp}: logi
 
 	const template = 
 		`
-		<div class=${classes.loginPage}>
+		<main class=${classes.loginPage}>
 			<h1>Welcome to Chat Noir!</h1>
 			<form action="submit">
 				<div class=${classes.fields}>
@@ -40,7 +40,7 @@ export const LoginPage: Template<loginPageProps> = ({goToMain, goToSignUp}: logi
 					<button id="signUp">Create account</button>
 				</div>
 			</form>
-		</div>
+		</main>
 		`
 	;
 

@@ -67,7 +67,7 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 
 	const template = 
 		`
-		<div class=${classes.signupPage}>
+		<main class=${classes.signupPage}>
 			<h1>Create new profile</h1>
 			<form action="submit">
 				<div class=${classes.fields}>
@@ -79,7 +79,7 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 					<button id="return">Return to sign in</button>
 				</div>
 			</form>
-		</div>
+		</main>
 		`
 	;
 
