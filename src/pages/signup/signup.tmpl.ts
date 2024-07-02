@@ -20,8 +20,8 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 		InputField({
 			label: "Last name",
 			inputType: "text", 
-			name: "last_name", 
-			id: "last_name",
+			name: "second_name", 
+			id: "second_name",
 			placeholder: "Enter your last name..."
 		}),
 		InputField({
@@ -61,7 +61,7 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 		})
 	];
 
-	const infoFields = ["first_name", "last_name", "email", "phone"];
+	const infoFields = ["first_name", "second_name", "email", "phone"];
 	const credentialFields= ["login", "password", "repeat_password"];
 
 
