@@ -1,7 +1,10 @@
 import { LoginPage } from "./pages/login/login.tmpl";
 import { SignupPage } from "./pages/signup/signup.tmpl";
 import { MainPage } from "./pages/main/main.tmpl";
+import { notFoundPage } from "./pages/notFound/notFound.tmpl";
+import { serverErrorPage } from "./pages/serverError/serverError.tmpl";
 import { Template, props } from "./types";
+
 import "./global.css";
 
 
@@ -51,10 +54,27 @@ const renderMainPage = () => {
 	window.history.pushState({page: "main"}, "", "/");
 	renderPage(
 		MainPage,
-		{}
+		{
+			goToLogin: renderLogInPage,
+			goToSignUp: renderSignUpPage,
+			goToError404: renderNotFoundPage,
+			goToError500: renderServerErrorPage
+		}
 	);
 };
-
+const renderNotFoundPage = () => {
+	window.history.pushState({page: "error404"}, "", "/404");
+	renderPage(
+		notFoundPage, 
+		{
+			returnToMainPage: renderMainPage
+		}
+	);
+};
+const renderServerErrorPage = () => {
+	window.history.pushState({page: "error500"}, "", "/500");
+	renderPage(serverErrorPage, {});
+};
  
 document.addEventListener(
 	"DOMContentLoaded", 

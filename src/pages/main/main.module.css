@@ -1,0 +1,25 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 60px;
+	
+	p {
+		text-align: center;
+	}
+
+	nav {
+		display: flex;
+		gap: 20px;
+
+	
+
+		button {
+			border: none;
+			outline: none;
+			padding: 12px 20px;
+			border-radius: 10px;
+
+			font-weight: 600;
+		}
+	}
+}

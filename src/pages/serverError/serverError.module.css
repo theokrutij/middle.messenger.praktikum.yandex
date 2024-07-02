@@ -1,0 +1,15 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	h1 {
+		margin-bottom: 20px;
+	}
+
+	h2 {
+		margin-bottom: 100px;
+	}
+
+	
+}
