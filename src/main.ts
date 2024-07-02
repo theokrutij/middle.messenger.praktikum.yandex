@@ -7,10 +7,9 @@ import "./global.css";
 
 const state = {
 	onUnload: () => {}
-}
+};
 
-
-function renderPage<T extends props>(page: Template<T>, props: T) {
+const renderPage = <T extends props>(page: Template<T>, props: T) => {
 	state.onUnload();
 	const [pageHTML, onLoad, onUnload] = page(props);
 	if (onUnload !== undefined) {
@@ -25,6 +24,7 @@ function renderPage<T extends props>(page: Template<T>, props: T) {
 		onLoad();
 	}
 }
+
 
 const renderLogInPage = () => {
 	window.history.pushState({page: "login"}, "", "/login");
@@ -54,6 +54,7 @@ const renderMainPage = () => {
 		{}
 	);
 };
+
  
 document.addEventListener(
 	"DOMContentLoaded", 
