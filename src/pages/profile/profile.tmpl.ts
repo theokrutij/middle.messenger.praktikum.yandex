@@ -216,7 +216,7 @@ const editPassword: Template<editPasswordProps> = ({
 	const template = 
 	`
 		<div class=${classes.modalWindow}>
-			<header class=${classes.header}>Edit profile</header>
+			<header class=${classes.header}>Edit password</header>
 			<form class=${classes.form}>
 				${inputFields.map(([template]) => template).join("\n")}
 				<div class=${classes.controls}>
