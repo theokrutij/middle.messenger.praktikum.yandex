@@ -1,4 +1,4 @@
-import { InputField } from "../../components/InputField/InputField.tmpl";
+import { InputField, props as inputFieldProps } from "../../components/InputField/InputField.tmpl";
 import { Template, User } from "../../types";
 
 import classes from "./profile.module.css";
@@ -34,11 +34,14 @@ export const ProfilePage: Template<props> = ({
 	
 	const openEditProfileModal = () => showModal(editProfileTemplate, editProfileOnLoad as () => void);
 	const closeEditProfileModal = () => hideModal(EditProfileOnUnload as () => void);
+	const openChangeProfilePhotoModal = () => showModal(changeProfilePhotoTemplate, changeProfilePhotoOnLoad as () => void);
+	const closeChangeProfilePhotoModal = () => hideModal(changeProfilePhotoOnUnload as () => void);
 	const openEditPasswordModal = () => showModal(editPasswordTemplate, editPasswordOnLoad as () => void);
 	const closeEditPasswordModal = () => hideModal(editPasswordOnUnload as () => void);
 
 
 	const [editProfileTemplate, editProfileOnLoad, EditProfileOnUnload] = editProfile({onClose: closeEditProfileModal}); 
+	const [changeProfilePhotoTemplate, changeProfilePhotoOnLoad, changeProfilePhotoOnUnload] = changeProfilePhoto({onClose: closeChangeProfilePhotoModal});
 	const [editPasswordTemplate, editPasswordOnLoad, editPasswordOnUnload] = editPassword({onClose: closeEditPasswordModal});
 
 	const template = 
@@ -85,6 +88,9 @@ export const ProfilePage: Template<props> = ({
 		const editButton = <HTMLButtonElement>document.querySelector("#editInfo");
 		editButton.addEventListener("click", openEditProfileModal);
 
+		const changeProfilePhotoButton = <HTMLButtonElement>document.querySelector("#changeProfilePhoto");
+		changeProfilePhotoButton.addEventListener("click", openChangeProfilePhotoModal);
+
 		const changePasswordButton = <HTMLButtonElement>document.querySelector("#changePassword");
 		changePasswordButton.addEventListener("click", openEditPasswordModal);
 	};
@@ -96,70 +102,48 @@ export const ProfilePage: Template<props> = ({
 		const editButton = <HTMLButtonElement>document.querySelector("#editInfo");
 		editButton.removeEventListener("click", openEditProfileModal);
 
+		const changeProfilePhotoButton = <HTMLButtonElement>document.querySelector("#changeProfilePhoto");
+		changeProfilePhotoButton.removeEventListener("click", openChangeProfilePhotoModal);
+
 		const changePasswordButton = <HTMLButtonElement>document.querySelector("#changePassword");
 		changePasswordButton.removeEventListener("click", openEditPasswordModal);
 	};
 
 
 	return [template, onLoad, onUnload];
-}
-
-
-type editProfileProps = {
-	onClose: () => void;
 };
 
-const editProfile: Template<editProfileProps> = ({onClose}: editProfileProps) => {
-	const inputFields = [
-		InputField({
-			label: "Username", 
-			inputType: "text", 
-			name: "login", 
-			id: "login",
-			placeholder: "Enter new username..."
-		}),
-		InputField({
-			label: "Display name", 
-			inputType: "text", 
-			name: "display_name", 
-			id: "display_name",
-			placeholder: "Enter new display name..."
-		}),
-		InputField({
-			label: "First name",
-			inputType: "text",
-			name: "first_name",
-			id: "first_name",
-			placeholder: "Enter new first name..."
-		}),
-		InputField({
-			label: "Last name",
-			inputType: "text", 
-			name: "second_name", 
-			id: "second_name",
-			placeholder: "Enter new last name..."
-		}),
-		InputField({
-			label: "Email",
-			inputType: "email", 
-			name: "email", 
-			id: "email",
-			placeholder: "Enter new email address..."		
-		}),
-		InputField({
-			label: "Phone",
-			inputType: "phone", 
-			name: "phone", 
-			id: "phone",
-			placeholder: "Enter new phone number..."		
-		}),
-	];
+const showModal = (modalHTML: string, onLoad: () => void) => {
+	const modalLayer = <HTMLDivElement>document.querySelector("#modalLayer");
+	modalLayer.classList.toggle("hidden");
+	modalLayer.innerHTML = modalHTML;
+	onLoad();
+};
+
+const hideModal = (onUnload: () => void) => {
+	const modalLayer = <HTMLDivElement>document.querySelector("#modalLayer");
+	modalLayer.classList.toggle("hidden");
+	onUnload();
+	modalLayer.innerHTML = "";
+};
+
+type editModalProps = {
+	title: string,
+	inputFieldsAsHTML: string,
+	onClose: () => void
+};
+
+const editModal: Template<editModalProps> = ({
+	title,
+	onClose,
+	inputFieldsAsHTML
+}: editModalProps) => {
 	const template = 
 	`	
 		<div class=${classes.modalWindow}>
-			<header class=${classes.header}>Edit profile</header>
+			<header class=${classes.header}>${title}</header>
 			<form class=${classes.form}>
-				${inputFields.map(([template]) => template).join("\n")}
+				${inputFieldsAsHTML}
 				<div class=${classes.controls}>
 					<button class=${classes.button} id="save">Save</button>
 					<button class=${classes.button} id="cancel">Cancel</button>
@@ -204,13 +188,61 @@ const editProfile: Template<editProfileProps> = ({onClose}: editProfileProps) =>
 	return [template, onLoad, onUnload];
 };
 
-type editPasswordProps = {
-	onClose: () => void
-}
+const editProfile: Template<{onClose: () => void}> = ({onClose}) => {
+	const inputFields = [
+		InputField({
+			label: "Username", 
+			inputType: "text", 
+			name: "login", 
+			id: "login",
+			placeholder: "Enter new username..."
+		}),
+		InputField({
+			label: "Display name", 
+			inputType: "text", 
+			name: "display_name", 
+			id: "display_name",
+			placeholder: "Enter new display name..."
+		}),
+		InputField({
+			label: "First name",
+			inputType: "text",
+			name: "first_name",
+			id: "first_name",
+			placeholder: "Enter new first name..."
+		}),
+		InputField({
+			label: "Last name",
+			inputType: "text", 
+			name: "second_name", 
+			id: "second_name",
+			placeholder: "Enter new last name..."
+		}),
+		InputField({
+			label: "Email",
+			inputType: "email", 
+			name: "email", 
+			id: "email",
+			placeholder: "Enter new email address..."		
+		}),
+		InputField({
+			label: "Phone",
+			inputType: "phone", 
+			name: "phone", 
+			id: "phone",
+			placeholder: "Enter new phone number..."		
+		}),
+	];
+	const [template, onLoad, onUnload] = editModal({
+		title: "Edit profile",
+		inputFieldsAsHTML: inputFields.map(([template]) => template).join("\n"), 
+		onClose: onClose
+	});
 
-const editPassword: Template<editPasswordProps> = ({
-	onClose
-}: editPasswordProps) => {
+	return [template, onLoad, onUnload];
+};
+
+const editPassword: Template<{onClose: () => void}> = ({onClose}) => {
 	const inputFields = [
 		InputField({
 			label: "Old password",
@@ -235,38 +267,30 @@ const editPassword: Template<editPasswordProps> = ({
 		})
 
 	];
-	const template = 
-	`
-		<div class=${classes.modalWindow}>
-			<header class=${classes.header}>Edit password</header>
-			<form class=${classes.form}>
-				${inputFields.map(([template]) => template).join("\n")}
-				<div class=${classes.controls}>
-					<button class=${classes.button} id="save">Save</button>
-					<button class=${classes.button} id="cancel">Cancel</button>
-				</div>
-			</form>
-		</div>
-	`
-	;
-
-	const onLoad = () => {
-		const saveButton = <HTMLButtonElement>document.querySelector("#save");
-		saveButton.addEventListener("click", onClose);
-
-		const cancelButton = <HTMLButtonElement>document.querySelector("#cancel");
-		cancelButton.addEventListener("click", onClose);
-	};
-
-	const onUnload = () => {
-		const saveButton = <HTMLButtonElement>document.querySelector("#save");
-		saveButton.removeEventListener("click", onClose);
-
-		const cancelButton = <HTMLButtonElement>document.querySelector("#cancel");
-		cancelButton.removeEventListener("click", onClose);
-	};
+	const [template, onLoad, onUnload] = editModal({
+		title: "Edit password",
+		inputFieldsAsHTML: inputFields.map(([template]) => template).join("\n"), 
+		onClose: onClose
+	});
 
 	return [template, onLoad, onUnload];
 };
 
+const changeProfilePhoto: Template<{onClose: () => void}> = ({onClose}) => {
+	const inputFields = [
+		InputField({
+			label: "New avatar URL", 
+			inputType: "text", 
+			name: "avatar", 
+			id: "avatar",
+			placeholder: "Paste link to your new avatar..."
+		})
+	];
+	const [template, onLoad, onUnload] = editModal({
+		title: "Change profile photo",
+		inputFieldsAsHTML: inputFields.map(([template]) => template).join("\n"), 
+		onClose: onClose
+	});
 
+	return [template, onLoad, onUnload];
+};
