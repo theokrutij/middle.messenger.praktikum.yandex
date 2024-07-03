@@ -7,7 +7,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	padding-bottom: 20px;
 
 	.header {
 		display: flex;
@@ -37,6 +36,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
+		padding-bottom: 20px;
 
 		.usernameAvatar {
 			display: flex;
@@ -115,8 +115,66 @@
 			font-weight: 600;
 			background-color: inherit;
 		}
-	}
+	}	
+}
 
+.modalLayer {
+	z-index: 1;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background-color: hsla(0, 0%, 0%, 30%);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.modalWindow {
+		background-color: hsl(0, 0%, 85%);
+		border-radius: 10px;
+		min-width: 300px;
+
+		.header {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 16px;
+			font-weight: 600;
+			border-bottom: 1px solid hsl(0, 0%, 60%);
+			padding: 20px;
+		}
+
+
+		.form {
+			display: flex;
+			flex-direction: column;
+
+			gap: 10px;
+			padding: 20px 40px;
+
+			.controls {
+				margin-top: 20px;
+				display: flex;
+				flex-direction: column;
+	
+				gap: 10px;
+	
+				.button {
+					padding: 12px 0;
+					background-color: hsl(0, 0%, 70%);
+					font-weight: 600;
+				}
+			}
+
+			/* input {
+				height: 40px;
+			} */
+		}
+
+		
+	}
 	
 }
 
