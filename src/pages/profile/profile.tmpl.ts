@@ -112,39 +112,46 @@ type editProfileProps = {
 const editProfile: Template<editProfileProps> = ({onClose}: editProfileProps) => {
 	const inputFields = [
 		InputField({
+			label: "Username", 
+			inputType: "text", 
+			name: "login", 
+			id: "login",
+			placeholder: "Enter new username..."
+		}),
+		InputField({
 			label: "Display name", 
 			inputType: "text", 
 			name: "display_name", 
 			id: "display_name",
-			placeholder: "Enter your display name..."
+			placeholder: "Enter new display name..."
 		}),
 		InputField({
 			label: "First name",
 			inputType: "text",
 			name: "first_name",
 			id: "first_name",
-			placeholder: "Enter your first name..."
+			placeholder: "Enter new first name..."
 		}),
 		InputField({
 			label: "Last name",
 			inputType: "text", 
 			name: "second_name", 
 			id: "second_name",
-			placeholder: "Enter your last name..."
+			placeholder: "Enter new last name..."
 		}),
 		InputField({
 			label: "Email",
 			inputType: "email", 
 			name: "email", 
 			id: "email",
-			placeholder: "Enter your email address..."		
+			placeholder: "Enter new email address..."		
 		}),
 		InputField({
 			label: "Phone",
 			inputType: "phone", 
 			name: "phone", 
 			id: "phone",
-			placeholder: "Enter your phone number..."		
+			placeholder: "Enter new phone number..."		
 		}),
 	];
 	const template = 
@@ -165,18 +172,33 @@ const editProfile: Template<editProfileProps> = ({onClose}: editProfileProps) =>
 
 	const onLoad = () => {
 		const saveButton = <HTMLButtonElement>document.querySelector("#save");
-		saveButton.addEventListener("click", onClose);
+		saveButton.addEventListener(
+			"click", (event) => {
+				event.preventDefault();
+				onClose();
+		});
 
 		const cancelButton = <HTMLButtonElement>document.querySelector("#cancel");
-		cancelButton.addEventListener("click", onClose);
+		cancelButton.addEventListener(
+			"click", (event) => {
+				event.preventDefault();
+				onClose();
+		});
 	};
 
 	const onUnload = () => {
 		const saveButton = <HTMLButtonElement>document.querySelector("#save");
-		saveButton.removeEventListener("click", onClose);
-
+		saveButton.removeEventListener(
+			"click", (event) => {
+				event.preventDefault();
+				onClose();
+		});
 		const cancelButton = <HTMLButtonElement>document.querySelector("#cancel");
-		cancelButton.removeEventListener("click", onClose);
+		cancelButton.removeEventListener(
+			"click", (event) => {
+				event.preventDefault();
+				onClose();
+		});
 	};
 
 	return [template, onLoad, onUnload];
