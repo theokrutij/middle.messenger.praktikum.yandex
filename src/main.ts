@@ -138,7 +138,6 @@ document.addEventListener(
 	() => {
 		const pageInWindowState = window.history.state !== null && "page" in window.history.state;
 		const locationPathIsValidPage = Object.values(Pages).includes(window.location.pathname as Pages);
-		console.log(window.location.pathname, locationPathIsValidPage);
 
 		if (pageInWindowState) {
 			state.currentPage = window.history.state["page"];	
@@ -150,7 +149,6 @@ document.addEventListener(
 			state.currentPage = Pages.notFound;
 		}
 
-		console.log("DOMloaded, current page:", state.currentPage);
 		navigateToPage(state.currentPage);
 	}
 );
@@ -159,7 +157,6 @@ window.addEventListener(
 	"popstate", 
 	(event) => {
 		if (event.state && "page" in event.state) {
-			console.log("Got page from event.state:", event.state["page"]);
 			renderPage(event.state["page"]);
 		}
 		else {
