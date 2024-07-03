@@ -7,14 +7,16 @@ type props = {
 	goToLogin: () => void,
 	goToSignUp: () => void,
 	goToError404: () => void,
-	goToError500: () => void
+	goToError500: () => void,
+	goToProfile: () => void,
 }
 
 export const MainPage: Template<props> = ({
 	goToLogin,
 	goToSignUp,
 	goToError404,
-	goToError500
+	goToError500,
+	goToProfile
 }: props) => {
 	const template = 
 	`
@@ -25,6 +27,7 @@ export const MainPage: Template<props> = ({
 				<button id="signup">Signup page</button>
 				<button id="error404">404 error page</button>
 				<button id="error500">500 error page</button>
+				<button id="profile">Profile</button>
 			</nav>
 		</main>
 	`;
@@ -41,6 +44,9 @@ export const MainPage: Template<props> = ({
 
 		const error500Button = <HTMLButtonElement>document.querySelector("#error500");
 		error500Button.addEventListener("click", goToError500);
+
+		const profileButton = <HTMLButtonElement>document.querySelector("#profile");
+		profileButton.addEventListener("click", goToProfile);
 	}
 
 	const onUnload = () => {
@@ -55,6 +61,9 @@ export const MainPage: Template<props> = ({
 
 		const error500Button = <HTMLButtonElement>document.querySelector("#error500");
 		error500Button.removeEventListener("click", goToError500);
+
+		const profileButton = <HTMLButtonElement>document.querySelector("#profile");
+		profileButton.removeEventListener("click", goToProfile);
 	}
 
 	return [template, onLoad, onUnload];

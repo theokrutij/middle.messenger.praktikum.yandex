@@ -3,21 +3,34 @@ import { SignupPage } from "./pages/signup/signup.tmpl";
 import { MainPage } from "./pages/main/main.tmpl";
 import { notFoundPage } from "./pages/notFound/notFound.tmpl";
 import { serverErrorPage } from "./pages/serverError/serverError.tmpl";
-import { Template, props } from "./types";
+import { ProfilePage } from "./pages/profile/profile.tmpl";
+import { Template, User, props } from "./types";
 
 import "./global.css";
+
+const DUMMY_USER: User = {
+	username: "JD",
+	first_name: "John",
+	second_name: "Dorian",
+	display_name: null,
+	avatar_url: null,
+	email: "jd_md@yandex.ru",
+	phone: "+7(800)5553535"
+};
 
 enum Pages {
 	login = "/login",
 	signup = "/signup",
 	main = "/",
 	notFound = "/404",
-	serverError = "/500"
+	serverError = "/500",
+	profile = "/profile"
 };
 
 const state = {
 	currentPage: Pages.login,
-	unloadPreviousPage: () => {}
+	unloadPreviousPage: () => {},
+	user: DUMMY_USER
 };
 
 const loadTemplate = <T extends props>(page: Template<T>, props: T) => {
@@ -63,6 +76,7 @@ const renderMainPage = () => {
 			goToSignUp: () => navigateToPage(Pages.signup),
 			goToError404: () => navigateToPage(Pages.notFound),
 			goToError500: () => navigateToPage(Pages.serverError),
+			goToProfile: () => navigateToPage(Pages.profile)
 		}
 	);
 };
@@ -77,7 +91,16 @@ const renderNotFoundPage = () => {
 const renderServerErrorPage = () => {
 	loadTemplate(serverErrorPage, {});
 };
- 
+const renderProfilePage = () => {
+	loadTemplate(
+		ProfilePage,
+		{
+			...state.user,
+			onClose: () => navigateToPage(Pages.main)
+		}
+	);
+};
+
 const renderPage = (page: string) => {
 	switch (page) {
 		case Pages.login:
@@ -94,6 +117,9 @@ const renderPage = (page: string) => {
 			break;
 		case Pages.serverError:
 			renderServerErrorPage();
+			break;
+		case Pages.profile:
+			renderProfilePage();
 			break;
 		default:
 			renderNotFoundPage();
