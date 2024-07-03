@@ -87,8 +87,6 @@ export const ProfilePage: Template<props> = ({
 
 		const changePasswordButton = <HTMLButtonElement>document.querySelector("#changePassword");
 		changePasswordButton.addEventListener("click", openEditPasswordModal);
-
-		openEditPasswordModal();
 	};
 
 	const onUnload = () => {
