@@ -280,3 +280,4 @@ const changeProfilePhoto: Template<{onClose: () => void}> = ({onClose}) => {
 
 	return [template, onLoad, onUnload];
 };
+
