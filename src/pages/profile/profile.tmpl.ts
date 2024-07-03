@@ -1,4 +1,4 @@
-import { InputField, props as inputFieldProps } from "../../components/InputField/InputField.tmpl";
+import { InputField } from "../../components/InputField/InputField.tmpl";
 import { Template, User } from "../../types";
 
 import classes from "./profile.module.css";
