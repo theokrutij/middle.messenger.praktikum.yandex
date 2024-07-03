@@ -22,6 +22,7 @@ button {
 	cursor: pointer;	
 	border: none;
 	outline: none;
+	border-radius: 10px;
 }
 
 .hidden {
