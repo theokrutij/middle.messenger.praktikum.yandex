@@ -18,20 +18,6 @@ export const ProfilePage: Template<props> = ({
 	phone,
 	onClose
 }: props) => {
-
-	const showModal = (modalHTML: string, onLoad: () => void) => {
-		const modalLayer = <HTMLDivElement>document.querySelector("#modalLayer");
-		modalLayer.classList.toggle("hidden");
-		modalLayer.innerHTML = modalHTML;
-		onLoad();
-	};
-	const hideModal = (onUnload: () => void) => {
-		const modalLayer = <HTMLDivElement>document.querySelector("#modalLayer");
-		modalLayer.classList.toggle("hidden");
-		onUnload();
-		modalLayer.innerHTML = "";
-	};
-	
 	const openEditProfileModal = () => showModal(editProfileTemplate, editProfileOnLoad as () => void);
 	const closeEditProfileModal = () => hideModal(EditProfileOnUnload as () => void);
 	const openChangeProfilePhotoModal = () => showModal(changeProfilePhotoTemplate, changeProfilePhotoOnLoad as () => void);
