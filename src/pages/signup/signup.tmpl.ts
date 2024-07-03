@@ -69,14 +69,14 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 		`
 		<main class=${classes.signupPage}>
 			<h1>Create new profile</h1>
-			<form action="submit">
+			<form class=${classes.form} action="submit">
 				<div class=${classes.fields}>
 						${inputFields.map(([template]) => template).join("\n")}
 				</div>
 				<div class=${classes.controls}>
-					<button id="continue">Continue</button>
-					<button class="hidden" id="create">Create profile</button>
-					<button id="return">Return to sign in</button>
+					<button class=${classes.button} id="continue">Continue</button>
+					<button class="${classes.button} hidden" id="create">Create profile</button>
+					<button class=${classes.button} id="return">Return to sign in</button>
 				</div>
 			</form>
 		</main>

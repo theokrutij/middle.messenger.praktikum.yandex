@@ -16,14 +16,15 @@ export const InputField: Template<props> = ({label, inputType, name, id, placeho
 		`<div class=${classes.inputField} id=${id + "_field"}>
 			<h6>${label}</h6>
 			<div class=${classes.inner}>
-				<input  
+				<input 
+					class=${classes.input} 
 					type="${inputType}" 
 					name="${name}" 
 					id="${id}" 
 					placeholder="${placeholder}" 
 					${required ? "required": ""}
 				/>
-				<button class="hidden" id=${id + "_clear"}><img src="/clear.svg" alt="clearButton"></button>
+				<button class="${classes.button} hidden"" id=${id + "_clear"}><img src="/clear.svg" alt="clearButton"></button>
 			</div>
 		</div>
 		`

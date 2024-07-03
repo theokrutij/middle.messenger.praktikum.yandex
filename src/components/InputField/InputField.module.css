@@ -19,7 +19,7 @@
 		
 		background-color: white;
 
-		input {
+		.input {
 			height: 40px;
 			font-size: 14px;
 			border: none;
@@ -27,7 +27,7 @@
 			flex: 1;
 		}
 
-		button {
+		.button {
 			height: 30px;
 			padding: 0;
 			background: none;

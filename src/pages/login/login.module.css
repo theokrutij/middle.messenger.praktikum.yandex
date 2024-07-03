@@ -6,7 +6,7 @@
 	justify-content: center;
 	gap: 80px;
 
-	form {
+	.form {
 		display: flex;
 		flex-direction: column;
 		gap: 40px;
@@ -22,7 +22,7 @@
 			flex-direction: column;
 			gap: 12px;
 
-			button {
+			.button {
 				font-size: 20px;
 				padding: 14px 0;
 				border-radius: 12px; 

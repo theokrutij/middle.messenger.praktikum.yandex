@@ -31,13 +31,13 @@ export const LoginPage: Template<loginPageProps> = ({goToMain, goToSignUp}: logi
 		`
 		<main class=${classes.loginPage}>
 			<h1>Welcome to Chat Noir!</h1>
-			<form action="submit">
+			<form class=${classes.form} action="submit">
 				<div class=${classes.fields}>
 					${(inputFields.map(([template]) => template)).join("\n")}
 				</div>
 				<div class=${classes.controls}>
-					<button id="signIn">Sign in</button>
-					<button id="signUp">Create account</button>
+					<button class=${classes.button} id="signIn">Sign in</button>
+					<button class=${classes.button} id="signUp">Create account</button>
 				</div>
 			</form>
 		</main>

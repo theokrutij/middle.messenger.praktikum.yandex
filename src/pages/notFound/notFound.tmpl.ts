@@ -10,9 +10,9 @@ export const notFoundPage: Template<props> = ({returnToMainPage}: props) => {
 	const template = 
 	`
 		<main class=${classes.page}>
-			<h1>404</h1>
-			<h2>Sorry, this page doesn't exist</h2>
-			<button id="return">Return to main page</button>
+			<h1 class=${classes.h1}>404</h1>
+			<h2 class=${classes.h2}>Sorry, this page doesn't exist</h2>
+			<button class=${classes.button} id="return">Return to main page</button>
 		</main>
 	`
 	;

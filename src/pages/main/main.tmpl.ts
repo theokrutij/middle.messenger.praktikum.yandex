@@ -22,12 +22,12 @@ export const MainPage: Template<props> = ({
 	`
 		<main class=${classes.page}>
 			<p>Main page will be here</p>
-			<nav>
-				<button id="login">Login page</button>
-				<button id="signup">Signup page</button>
-				<button id="error404">404 error page</button>
-				<button id="error500">500 error page</button>
-				<button id="profile">Profile</button>
+			<nav class=${classes.nav}>
+				<button class=${classes.button} id="login">Login page</button>
+				<button class=${classes.button} id="signup">Signup page</button>
+				<button class=${classes.button} id="error404">404 error page</button>
+				<button class=${classes.button} id="error500">500 error page</button>
+				<button class=${classes.button} id="profile">Profile</button>
 			</nav>
 		</main>
 	`;
