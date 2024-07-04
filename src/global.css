@@ -26,5 +26,19 @@ button {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
+}
+
+.modal-layer {
+	z-index: 1;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background-color: hsla(0deg 0% 0% / 30%);
+	overflow: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }

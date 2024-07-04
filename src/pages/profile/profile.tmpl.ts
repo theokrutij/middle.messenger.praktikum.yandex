@@ -70,8 +70,6 @@ export const ProfilePage: Template<props> = ({
 				<button class=${classes.button} id="changePassword">Change password</button>
 			</main>
 		</div>
-		<div id="modalLayer" class="${classes["modal-layer"]} hidden"></div>
-
 	`
 	;
 
@@ -108,14 +106,14 @@ export const ProfilePage: Template<props> = ({
 };
 
 const showModal = (modalHTML: string, onLoad: () => void) => {
-	const modalLayer = <HTMLDivElement>document.querySelector("#modalLayer");
+	const modalLayer = <HTMLDivElement>document.querySelector("#modal-layer");
 	modalLayer.classList.toggle("hidden");
 	modalLayer.innerHTML = modalHTML;
 	onLoad();
 };
 
 const hideModal = (onUnload: () => void) => {
-	const modalLayer = <HTMLDivElement>document.querySelector("#modalLayer");
+	const modalLayer = <HTMLDivElement>document.querySelector("#modal-layer");
 	modalLayer.classList.toggle("hidden");
 	onUnload();
 	modalLayer.innerHTML = "";
