@@ -27,6 +27,8 @@ enum Pages {
 	profile = "/profile"
 };
 
+const isValidPage = (page: string) =>  Object.values(Pages).includes(page as Pages);
+
 const state = {
 	currentPage: Pages.login,
 	unloadPreviousPage: () => {},
@@ -57,7 +59,6 @@ const renderLogInPage = () => {
 			goToMain: () => navigateToPage(Pages.main)
 		}
 	);
-	// window.location.href = "/login";
 };
 const renderSignUpPage = () => {
 	loadTemplate(
@@ -102,6 +103,7 @@ const renderProfilePage = () => {
 };
 
 const renderPage = (page: string) => {
+	state.currentPage = isValidPage(page) ? page as Pages : Pages.notFound;
 	switch (page) {
 		case Pages.login:
 			renderLogInPage();
@@ -129,7 +131,6 @@ const renderPage = (page: string) => {
 const navigateToPage = (page: Pages) => {
 	window.history.pushState({page: page}, "", page);
 	renderPage(page);
-	state.currentPage = page;
 };
 
 
@@ -137,12 +138,11 @@ document.addEventListener(
 	"DOMContentLoaded",
 	() => {
 		const pageInWindowState = window.history.state !== null && "page" in window.history.state;
-		const locationPathIsValidPage = Object.values(Pages).includes(window.location.pathname as Pages);
 
 		if (pageInWindowState) {
 			state.currentPage = window.history.state["page"];	
 		}
-		else if (locationPathIsValidPage) {
+		else if (isValidPage(window.location.pathname)) {
 			state.currentPage = window.location.pathname as Pages;
 		}
 		else {
