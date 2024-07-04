@@ -73,11 +73,9 @@ const renderMainPage = () => {
 	loadTemplate(
 		MainPage,
 		{
-			goToLogin: () => navigateToPage(Pages.login),
-			goToSignUp: () => navigateToPage(Pages.signup),
-			goToError404: () => navigateToPage(Pages.notFound),
-			goToError500: () => navigateToPage(Pages.serverError),
-			goToProfile: () => navigateToPage(Pages.profile)
+			messageProps: [
+				{text: "Hey!", datetime: "Today, 12:00"}
+			]
 		}
 	);
 };

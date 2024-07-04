@@ -1,23 +1,85 @@
 .page {
+	flex: 1;
+	height: 100%;
 	display: flex;
-	flex-direction: column;
-	gap: 60px;
-	
-	p {
-		text-align: center;
+
+	.icon-button {
+		background-color: inherit;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	.nav {
+	.search-field-wrap {
+		width: 240px;
+	}
+
+	.header {
+		min-height: 80px;
 		display: flex;
+		align-items: center;
 		gap: 20px;
+		padding: 0 20px;
+		border-bottom: 1px solid hsl(0deg 0% 50%);
+		background-color: hsl(0deg 0% 90%);
 
-	
+		.icon-button {
+			height: 40px;
+			width: 40px;
+		}
+	}
 
-		.button {
-			outline: none;
-			padding: 12px 20px;
-			border-radius: 10px;
-			font-weight: 600;
+	.sidebar {
+		display: flex;
+		flex-direction: column;
+		min-width: 400px;
+		border-right: 1px solid hsl(0deg 0% 50%);		
+	}
+
+	.chat {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+
+		.title {
+			flex: 1;
+			text-align: center;
+			font-size: 18px;
+			font-weight: 500;
+		}
+
+		.messages {
+			flex: 1;
+		}
+
+		.controls {
+			background-color: hsl(0deg 0% 90%);
+			min-height: 80px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 20px;
+
+
+			.new-message-wrap {
+				width: 400px;
+			}
 		}
 	}
 }
+
+.send-button-icon {
+	height: 27px;
+	width: 30px;
+}
+
+.burger-icon {
+	height: 22px;
+	width: 26px;
+}
+
+.dots-icon {
+	height: 20px;
+	width: 6px;
+}
+

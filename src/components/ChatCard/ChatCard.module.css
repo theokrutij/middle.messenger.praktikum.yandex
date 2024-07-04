@@ -1,0 +1,57 @@
+.chat-card {
+	border-bottom: 1px solid hsl(0deg 0% 30%);
+	padding: 8px 12px;
+	gap: 12px;
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	grid-template-rows: 1fr 1fr;
+	/* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
+	grid-template-areas: 
+		"avatar name datetime"
+		"avatar lastMessage unreadCount"
+	;
+	row-gap: 0;
+	align-items: center;
+
+
+	.avatar {
+		grid-area: avatar;
+		height: 50px;
+		width: 50px;
+		border-radius: 100%;
+		background-color: hsl(0deg 0% 70%);
+	}
+
+	.name {
+		grid-area: name;
+		font-size: 14px;
+		font-weight: 500;
+	}
+
+	.message {
+		grid-area: lastMessage;
+		font-size: 12px;
+
+		.text {
+			color: hsl(0deg 0% 50%);
+		}
+	}
+
+	.datetime {
+		grid-area: datetime;
+		color: hsl(0deg 0% 50%);
+		font-size: 10px;
+	}
+
+	.unread-count {
+		grid-area: unreadCount;
+		font-size: 12px;
+		font-weight: 600;
+		justify-self: flex-end;
+		padding: 4px 8px;
+		border-radius: 100%;
+		background-color: hsl(0deg 0% 85%);
+	}
+	
+
+}
