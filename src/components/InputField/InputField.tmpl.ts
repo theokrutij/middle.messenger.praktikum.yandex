@@ -1,5 +1,5 @@
 import { Template } from "../../types";
-import classes from "./InputField.module.css"
+import classes from "./InputField.module.css";
 
 
 type props = {
@@ -32,4 +32,4 @@ export const InputField: Template<props> = ({label, inputType, name, id, placeho
 	const onload = () => {};
 
 	return [template, onload];
-}
+};

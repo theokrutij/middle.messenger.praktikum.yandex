@@ -1,4 +1,4 @@
-import { Template } from "../../types"
+import { Template } from "../../types";
 
 import classes from "./main.module.css";
 
@@ -47,7 +47,7 @@ export const MainPage: Template<props> = ({
 
 		const profileButton = <HTMLButtonElement>document.querySelector("#profile");
 		profileButton.addEventListener("click", goToProfile);
-	}
+	};
 
 	const onUnload = () => {
 		const loginButton = <HTMLButtonElement>document.querySelector("#login");
@@ -64,7 +64,7 @@ export const MainPage: Template<props> = ({
 
 		const profileButton = <HTMLButtonElement>document.querySelector("#profile");
 		profileButton.removeEventListener("click", goToProfile);
-	}
+	};
 
 	return [template, onLoad, onUnload];
-}
+};

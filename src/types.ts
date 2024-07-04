@@ -1,8 +1,8 @@
 export type props = {
 	[key: string]: string | number | boolean | (() => void) | null
-}
+} | null
 
-export type Template<T extends props> = (
+export type Template<T extends props = null> = (
 	props: T
 ) => [string, (() => void)?, (() => void)?];
 

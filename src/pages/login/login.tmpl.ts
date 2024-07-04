@@ -47,13 +47,13 @@ export const LoginPage: Template<loginPageProps> = ({goToMain, goToSignUp}: logi
 	const handleSignInClick = (event: MouseEvent) => {
 		event.preventDefault();
 		goToMain();
-	} 
+	}; 
 
 
 	const handleSignUpClick = (event: MouseEvent) => {
 		event.preventDefault();
 		goToSignUp();
-	}
+	};
 
 	const onLoad = () => {
 		inputFields.map(([,onLoad]) => {
@@ -83,10 +83,10 @@ export const LoginPage: Template<loginPageProps> = ({goToMain, goToSignUp}: logi
 
 		const signUpButton = <HTMLButtonElement>document.querySelector("#signUp");
 		signUpButton.removeEventListener("click", handleSignUpClick);
-	}
+	};
 
 	return [template, onLoad, onUnload];
-}
+};
 
 
 

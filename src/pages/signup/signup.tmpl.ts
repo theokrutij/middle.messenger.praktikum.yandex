@@ -147,12 +147,12 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 
 		const createButton =<HTMLButtonElement>document.querySelector("#create");
 		createButton.removeEventListener("click", handleCreateClick);
-	}	
+	};	
 	return [template, onLoad, onUnload];
-}
+};
 
 
 const toggleHidden = (id: string) => {
 	const elem = <HTMLElement>document.querySelector(`#${id}`);
 	elem.classList.toggle("hidden");
-}
+};

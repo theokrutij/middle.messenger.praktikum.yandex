@@ -23,7 +23,7 @@ export const notFoundPage: Template<props> = ({returnToMainPage}: props) => {
 			"click",
 			returnToMainPage
 		);
-	}
+	};
 
-	return [template, onLoad]
-}
+	return [template, onLoad];
+};

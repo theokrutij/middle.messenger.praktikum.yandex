@@ -40,14 +40,14 @@ const loadTemplate = <T extends props>(page: Template<T>, props: T) => {
 		state.unloadPreviousPage = onUnload;
 	}
 	else {
-		state.unloadPreviousPage = () => {}
+		state.unloadPreviousPage = () => {};
 	}
 	document.querySelector<HTMLDivElement>("#app")!.innerHTML = pageHTML;
 
 	if (onLoad !== undefined) {
 		onLoad();
 	}
-}
+};
 
 const renderLogInPage = () => {
 	loadTemplate(
@@ -89,7 +89,7 @@ const renderNotFoundPage = () => {
 	);
 };
 const renderServerErrorPage = () => {
-	loadTemplate(serverErrorPage, {});
+	loadTemplate(serverErrorPage, null);
 };
 const renderProfilePage = () => {
 	loadTemplate(
@@ -124,7 +124,7 @@ const renderPage = (page: string) => {
 		default:
 			renderNotFoundPage();
 	}
-}
+};
 
 const navigateToPage = (page: Pages) => {
 	window.history.pushState({page: page}, "", page);

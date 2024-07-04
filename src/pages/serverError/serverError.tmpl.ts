@@ -3,7 +3,7 @@ import { Template } from "../../types";
 import classes from "./serverError.module.css";
 
 
-export const serverErrorPage: Template<{}> = () => {
+export const serverErrorPage: Template = () => {
 	const template = 
 	`	
 		<main class=${classes.page}>
@@ -21,5 +21,5 @@ export const serverErrorPage: Template<{}> = () => {
 		contactLink.addEventListener("click", (event) => event.preventDefault());
 	};
 
-	return [template, onLoad]
-}
+	return [template, onLoad];
+};
