@@ -8,10 +8,10 @@ export type Template<T extends props = null> = (
 
 export type User = {
 	username: string,
-	first_name: string,
-	second_name: string,
-	display_name: string | null,
+	firstName: string,
+	secondName: string,
+	displayName: string | null,
 	email: string,
 	phone: string,
-	avatar_url: string | null
+	avatarUrl: string | null
 }

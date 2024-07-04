@@ -10,10 +10,10 @@ import "./global.css";
 
 const DUMMY_USER: User = {
 	username: "JD",
-	first_name: "John",
-	second_name: "Dorian",
-	display_name: null,
-	avatar_url: null,
+	firstName: "John",
+	secondName: "Dorian",
+	displayName: null,
+	avatarUrl: null,
 	email: "jd_md@yandex.ru",
 	phone: "+7(800)5553535"
 };
