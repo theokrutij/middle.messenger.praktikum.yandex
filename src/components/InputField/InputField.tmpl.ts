@@ -2,13 +2,13 @@ import { Template } from "../../types";
 import classes from "./InputField.module.css";
 
 
-type props = {
+export type props = {
 	label?: string,
 	inputType: "text" | "password" | "email" | "phone",
 	name: string,
 	id: string,
 	placeholder: string,
-	defaultValue?: string, 
+	initialValue?: string, 
 	required?: boolean
 }
 
@@ -18,7 +18,7 @@ export const InputField: Template<props> = ({
 	name, 
 	id, 
 	placeholder, 
-	defaultValue,
+	initialValue: initialValue,
 	required = false 
 }: props) => {
 	const template =
@@ -39,9 +39,9 @@ export const InputField: Template<props> = ({
 		`
 		;
 	const onload = () => {
-		const inputElement = <HTMLInputElement>document.querySelector("#id");
-		if (defaultValue !== undefined) {
-			inputElement.value = defaultValue;
+		const inputElement = <HTMLInputElement>document.querySelector(`#${id}`);
+		if (initialValue !== undefined) {
+			inputElement.value = initialValue;
 		}
 	};
 
