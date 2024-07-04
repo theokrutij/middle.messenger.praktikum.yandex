@@ -3,18 +3,27 @@ import classes from "./InputField.module.css";
 
 
 type props = {
-	label: string,
+	label?: string,
 	inputType: "text" | "password" | "email" | "phone",
 	name: string,
 	id: string,
 	placeholder: string,
+	defaultValue?: string, 
 	required?: boolean
 }
 
-export const InputField: Template<props> = ({label, inputType, name, id, placeholder, required=false}: props)  => {
-	const template = 		
+export const InputField: Template<props> = ({ 
+	label,
+	inputType, 
+	name, 
+	id, 
+	placeholder, 
+	defaultValue,
+	required = false 
+}: props) => {
+	const template =
 		`<div class=${classes["input-field"]} id=${id + "_field"}>
-			<h6>${label}</h6>
+			${label ? `<h6 class=${classes.h6}>` + label + "</h6>" : ""}
 			<div class=${classes.inner}>
 				<input 
 					class=${classes.input} 
@@ -22,14 +31,19 @@ export const InputField: Template<props> = ({label, inputType, name, id, placeho
 					name="${name}" 
 					id="${id}" 
 					placeholder="${placeholder}" 
-					${required ? "required": ""}
+					${required ? "required" : ""}
 				/>
 				<button class="${classes.button} hidden"" id=${id + "_clear"}><img src="/clear.svg" alt="clearButton"></button>
 			</div>
 		</div>
 		`
-	;
-	const onload = () => {};
+		;
+	const onload = () => {
+		const inputElement = <HTMLInputElement>document.querySelector("#id");
+		if (defaultValue !== undefined) {
+			inputElement.value = defaultValue;
+		}
+	};
 
 	return [template, onload];
 };
