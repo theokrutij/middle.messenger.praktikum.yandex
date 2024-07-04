@@ -1,9 +1,8 @@
 .wrapper {
-	background-color: hsl(0, 0%, 85%);
+	background-color: hsl(0deg 0% 85%);
 	max-width: 400px;
 	flex: 1;
 	border-radius: 10px;
-
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
@@ -24,7 +23,6 @@
 			padding: 0;
 			height: 30px;
 			width: 30px;
-
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -38,7 +36,14 @@
 		gap: 20px;
 		padding-bottom: 20px;
 
-		.usernameAvatar {
+			
+		.button {
+			padding: 12px 20px;
+			font-weight: 600;
+			background-color: inherit;
+		}
+
+		.username-avatar {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -57,7 +62,7 @@
 				align-items: center;
 				gap: 8px;
 		
-				.avatarImage {
+				.avatar-image {
 					height: 120px;
 					width: 120px;
 				}
@@ -67,34 +72,32 @@
 					font-weight: 600;
 					padding: 6px;
 					width: fit-content;
-	
-					background-color: hsl(0, 0%, 60%);
+					background-color: hsl(0deg 0% 60%);
 				}
 			}
 		}
 	
 
 	
-		.userInfo {
+		.info {
 			display: flex;
 			flex-direction: column;
+			border-top: 1px solid hsl(0deg 0% 50%);
+			border-bottom: 1px solid hsl(0deg 0% 50%);
 
-			border-top: 1px solid hsl(0, 0%, 50%);
-			border-bottom: 1px solid hsl(0, 0%, 50%);
-
-			.userInfoField {
+			.field {
 				display: flex;	
 				justify-content: space-between;
 				align-items: center;
 				height: 45px;
 				padding: 0 20px;
 	
-				.fieldName {
+				.field-name {
 					font-size: 14px;
 					font-weight: 400;
 				}
 	
-				.fieldValue {
+				.field-value {
 					font-size: 14px;
 					font-weight: 500;
 				}	
@@ -103,37 +106,31 @@
 
 			.delimiter {
 				height: 1px;
-				background-color: hsl(0, 0%, 60%);
+				background-color: hsl(0deg 0% 60%);
 				margin-left: 20px
 			}
 		}
 	
 		
-	
-		.button {
-			padding: 12px 20px;
-			font-weight: 600;
-			background-color: inherit;
-		}
+
 	}	
 }
 
-.modalLayer {
+.modal-layer {
 	z-index: 1;
 	position: fixed;
 	height: 100%;
 	width: 100%;
 	top: 0;
 	left: 0;
-	background-color: hsla(0, 0%, 0%, 30%);
+	background-color: hsla(0deg 0% 0% 30%);
 	overflow: auto;
-
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
-	.modalWindow {
-		background-color: hsl(0, 0%, 85%);
+	.modal-window {
+		background-color: hsl(0deg 0%deg 85%);
 		border-radius: 10px;
 		min-width: 300px;
 
@@ -143,7 +140,7 @@
 			align-items: center;
 			font-size: 16px;
 			font-weight: 600;
-			border-bottom: 1px solid hsl(0, 0%, 60%);
+			border-bottom: 1px solid hsl(0deg 0%deg 60%);
 			padding: 20px;
 		}
 
@@ -151,7 +148,6 @@
 		.form {
 			display: flex;
 			flex-direction: column;
-
 			gap: 10px;
 			padding: 20px 40px;
 
@@ -159,12 +155,11 @@
 				margin-top: 20px;
 				display: flex;
 				flex-direction: column;
-	
 				gap: 10px;
 	
 				.button {
 					padding: 12px 0;
-					background-color: hsl(0, 0%, 70%);
+					background-color: hsl(0deg 0% 70%);
 					font-weight: 600;
 				}
 			}

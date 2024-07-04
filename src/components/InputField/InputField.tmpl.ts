@@ -13,7 +13,7 @@ type props = {
 
 export const InputField: Template<props> = ({label, inputType, name, id, placeholder, required=false}: props)  => {
 	const template = 		
-		`<div class=${classes.inputField} id=${id + "_field"}>
+		`<div class=${classes["input-field"]} id=${id + "_field"}>
 			<h6>${label}</h6>
 			<div class=${classes.inner}>
 				<input 

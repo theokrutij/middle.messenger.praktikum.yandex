@@ -1,4 +1,4 @@
-.inputField {
+.input-field {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
@@ -11,12 +11,10 @@
 	.inner {
 		display: flex;
 		align-items: center;
-
 		max-width: 500px;
 		border: 1px black solid;
 		border-radius: 12px;
 		padding: 0 8px;
-		
 		background-color: white;
 
 		.input {

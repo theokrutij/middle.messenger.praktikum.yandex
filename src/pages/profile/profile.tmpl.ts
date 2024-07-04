@@ -39,30 +39,30 @@ export const ProfilePage: Template<props> = ({
 				<button class=${classes.button} id="close"><img src="/close.svg" alt="closeButton"></button>
 			</header>
 			<main class=${classes.main}>
-				<div class=${classes.usernameAvatar}>
+				<div class=${classes["username-avatar"]}>
 					<div class=${classes.avatar}>
-						<img class=${classes.avatarImage} src=${avatar_url} alt="User avatar">
+						<img class=${classes["avatar-image"]} src=${avatar_url} alt="User avatar">
 						<button class=${classes.button} id="changeProfilePhoto">Change photo</button>		
 					</div>
 					<h2 class=${classes.username}>${display_name !== null ? display_name : username}</h2>
 				</div>
-				<div class=${classes.userInfo}>
-					<div class=${classes.userInfoField}>
-						<h3 class=${classes.fieldName}>Name</h3><p class=${classes.fieldValue}>${first_name + " " + second_name}</p>
+				<div class=${classes.info}>
+					<div class=${classes.field}>
+						<h3 class=${classes["field-name"]}>Name</h3><p class=${classes["field-value"]}>${first_name + " " + second_name}</p>
 					</div>
 					<div class=${classes.delimiter}></div>
-					<div class=${classes.userInfoField}>
-						<h3 class=${classes.fieldName}>Email</h3><p class=${classes.fieldValue}>${email}</p>
+					<div class=${classes.field}>
+						<h3 class=${classes["field-name"]}>Email</h3><p class=${classes["field-value"]}>${email}</p>
 					</div>
 					<div class=${classes.delimiter}></div>
-					<div class=${classes.userInfoField}>
-						<h3 class=${classes.fieldName}>Phone</h3><p class=${classes.fieldValue}>${phone}</p>
+					<div class=${classes.field}>
+						<h3 class=${classes["field-name"]}>Phone</h3><p class=${classes["field-value"]}>${phone}</p>
 					</div>
 				</div>
 				<button class=${classes.button} id="changePassword">Change password</button>
 			</main>
 		</div>
-		<div id="modalLayer" class="${classes.modalLayer} hidden"></div>
+		<div id="modalLayer" class="${classes["modal-layer"]} hidden"></div>
 
 	`
 	;
@@ -126,7 +126,7 @@ const editModal: Template<editModalProps> = ({
 }: editModalProps) => {
 	const template = 
 	`	
-		<div class=${classes.modalWindow}>
+		<div class=${classes["modal-window"]}>
 			<header class=${classes.header}>${title}</header>
 			<form class=${classes.form}>
 				${inputFieldsAsHTML}

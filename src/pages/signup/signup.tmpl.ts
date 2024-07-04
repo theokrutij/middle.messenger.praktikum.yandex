@@ -67,7 +67,7 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 
 	const template = 
 		`
-		<main class=${classes.signupPage}>
+		<main class=${classes.page}>
 			<h1>Create new profile</h1>
 			<form class=${classes.form} action="submit">
 				<div class=${classes.fields}>
