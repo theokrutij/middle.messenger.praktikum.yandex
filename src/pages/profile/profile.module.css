@@ -123,14 +123,14 @@
 	width: 100%;
 	top: 0;
 	left: 0;
-	background-color: hsla(0deg 0% 0% 30%);
+	background-color: hsla(0deg 0% 0% / 30%);
 	overflow: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
 	.modal-window {
-		background-color: hsl(0deg 0%deg 85%);
+		background-color: hsl(0deg 0% 85%);
 		border-radius: 10px;
 		min-width: 300px;
 
