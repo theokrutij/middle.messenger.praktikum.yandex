@@ -1,5 +1,5 @@
 export type props = {
-	[key: string]: string | number | boolean | (() => void) | null
+	[key: string]: string | number | boolean | (() => void) | props | props[] | null
 } | null
 
 export type Template<T extends props = null> = (
