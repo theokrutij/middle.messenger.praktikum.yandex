@@ -1,0 +1,23 @@
+{
+  "name": "practicum-chat",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --port 3000",
+    "start": "tsc && vite build && node express_server.js",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "engines": {
+    "node": "20.x",
+    "npm": "10.x"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "express": "^4.19.2",
+    "postcss": "^8.4.38",
+    "postcss-nested": "^6.0.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
+  }
+}
