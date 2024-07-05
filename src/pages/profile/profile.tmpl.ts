@@ -138,7 +138,9 @@ const editModal: Template<editModalProps> = ({
 		<div class=${classes["modal-window"]}>
 			<header class=${classes.header}>${title}</header>
 			<form class=${classes.form}>
-				${inputFields.map(([template]) => template).join("\n")}
+				<div class=${classes.fields}>
+					${inputFields.map(([template]) => template).join("\n")}
+				</div> 
 				<div class=${classes.controls}>
 					<button class=${classes.button} id="save">Save</button>
 					<button class=${classes.button} id="cancel">Cancel</button>
@@ -212,7 +214,11 @@ const editProfile: Template<editProfileProps> = ({
 			name: "login", 
 			id: "login",
 			placeholder: "Enter new username...",
-			initialValue: currentUsername
+			initialValue: currentUsername,
+			minlength: 3,
+			maxlength: 20,
+			pattern: "^[a-zA-Z0-9_\\-]*[a-zA-Z]+[a-zA-Z0-9_\\-]*$",
+			required: true
 		},
 		{
 			label: "Display name", 
@@ -228,7 +234,9 @@ const editProfile: Template<editProfileProps> = ({
 			name: "first_name",
 			id: "first_name",
 			placeholder: "Enter new first name...",
-			initialValue: currentFirstName
+			initialValue: currentFirstName,
+			pattern: "^[A-ZА-Я][a-zA-Zа-яА-Я\\-]*$",
+			required: true
 		},
 		{
 			label: "Last name",
@@ -236,7 +244,9 @@ const editProfile: Template<editProfileProps> = ({
 			name: "second_name", 
 			id: "second_name",
 			placeholder: "Enter new last name...",
-			initialValue: currentSecondName
+			initialValue: currentSecondName,
+			pattern: "^[A-ZА-Я][a-zA-Zа-яА-Я\\-]*$",
+			required: true
 		},
 		{
 			label: "Email",
@@ -244,15 +254,20 @@ const editProfile: Template<editProfileProps> = ({
 			name: "email", 
 			id: "email",
 			placeholder: "Enter new email address...",
-			initialValue: currentEmail	
+			initialValue: currentEmail,
+			required: true
 		},
 		{
 			label: "Phone",
-			inputType: "phone", 
+			inputType: "tel", 
 			name: "phone", 
 			id: "phone",
 			placeholder: "Enter new phone number...",
-			initialValue: currentPhone	
+			initialValue: currentPhone,
+			minlength: 10,
+			maxlength: 15,
+			pattern: "^\\+?[0-9]+$",
+			required: true
 		},
 	];
 	const [template, onLoad, onUnload] = editModal({
@@ -271,21 +286,27 @@ const editPassword: Template<{onClose: () => void}> = ({onClose}) => {
 			inputType: "password",
 			name: "oldPassword",
 			id: "oldPassword",
-			placeholder: "Enter your current password..."
+			placeholder: "Enter your current password...",
+			required: true
 		},
 		{
 			label: "New password",
 			inputType: "password",
 			name: "newPassword",
 			id: "newPassword",
-			placeholder: "Enter new password..."
+			placeholder: "Enter new password...",
+			minlength: 8,
+			maxlength: 40,
+			pattern: "^(?=.*[A-Z])(?=.*\\d).+$",
+			required: true
 		},
 		{
 			label: "New password (repeat)",
 			inputType: "password",
 			name: "repeatNewPassword",
 			id: "repeatNewPassword",
-			placeholder: "Repeat new password..."
+			placeholder: "Repeat new password...",
+			required: true
 		}
 	];
 	const [template, onLoad, onUnload] = editModal({

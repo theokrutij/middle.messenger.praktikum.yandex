@@ -38,7 +38,9 @@ export const MainPage: Template<props> = ({
 		<main class=${classes.page}>
 			<div class=${classes.sidebar}>
 				<header class=${classes.header}>
-					<button class=${classes["icon-button"]}><img class=${classes["burger-icon"]} src="/burger.svg" alt="optionsButton"></button>
+					<button class=${classes["icon-button"]}>
+						<img class=${classes["burger-icon"]} src="/burger.svg" alt="optionsButton">
+					</button>
 					<div class=${classes["search-field-wrap"]}>
 						${searchField[0]}
 					</div>

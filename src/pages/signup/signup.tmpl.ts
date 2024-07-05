@@ -15,54 +15,72 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 			inputType: "text", 
 			name: "first_name", 
 			id: "first_name",
-			placeholder: "Enter your first name..."
+			placeholder: "Enter your first name...",
+			pattern: "^[A-ZА-Я][a-zA-Zа-яА-Я\\-]*$",
+			required: true
 		}),
 		InputField({
 			label: "Last name",
 			inputType: "text", 
 			name: "second_name", 
 			id: "second_name",
-			placeholder: "Enter your last name..."
+			placeholder: "Enter your last name...",
+			pattern: "^[A-ZА-Я][a-zA-Zа-яА-Я\\-]*$",
+			required: true,
 		}),
 		InputField({
 			label: "Email",
 			inputType: "email", 
 			name: "email", 
 			id: "email",
-			placeholder: "Enter your email address..."		
+			placeholder: "Enter your email address...",
+			required: true
 		}),
 		InputField({
 			label: "Phone",
-			inputType: "phone", 
+			inputType: "tel", 
 			name: "phone", 
 			id: "phone",
-			placeholder: "Enter your phone number..."		
+			placeholder: "Enter your phone number...",
+			minlength: 10,
+			maxlength: 15,
+			pattern: "^\\+?[0-9]+$",
+			required: true
 		}),
 		InputField({
 			label: "Username",
 			inputType: "text",
 			name: "login",
 			id: "login",
-			placeholder: "Enter your username..."
+			placeholder: "Enter your username...",
+			minlength: 3,
+			maxlength: 20,
+			pattern: "^[a-zA-Z0-9_\\-]*[a-zA-Z]+[a-zA-Z0-9_\\-]*$",
+			required: true
 		}),
 		InputField({
 			label: "Password",
 			inputType: "password",
 			name: "password",
 			id: "password",
-			placeholder: "Enter your password..."
+			placeholder: "Enter your password...",
+			minlength: 8,
+			maxlength: 40,
+			pattern: "^(?=.*[A-Z])(?=.*\\d).+$",
+			required: true
 		}),
 		InputField({
 			label: "Repeat password",
 			inputType: "password",
 			name: "repeat_password",
 			id: "repeat_password",
-			placeholder: "Repeat your password..."
+			placeholder: "Repeat your password...",
+			required: true
 		})
 	];
 
-	const infoFields = ["first_name", "second_name", "email", "phone"];
-	const credentialFields= ["login", "password", "repeat_password"];
+	const infoFieldIds = ["first_name", "second_name", "email", "phone"];
+	const credentialFieldIds= ["login", "password", "repeat_password"];
 
 
 	const template = 
@@ -89,15 +107,25 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 	const handleContinueClick = (event: MouseEvent) => {
 		event.preventDefault();
 
-		infoFields.map((id) => {
-			toggleHidden(`${id}_field`);
+		let infoFieldsAreValid = true;
+		infoFieldIds.forEach((id) => {
+			const inputElement = <HTMLInputElement>document.querySelector(`#${id}`);
+			const fieldIsValid = inputElement.reportValidity() ;
+			if (!fieldIsValid) {
+				infoFieldsAreValid = false;
+			}
 		});
-		credentialFields.map((id) => {
-			toggleHidden(`${id}_field`);
-		});
+		if (infoFieldsAreValid) {
+			infoFieldIds.forEach((id) => {
+				toggleHidden(`${id}_field`);
+			});
+			credentialFieldIds.forEach((id) => {
+				toggleHidden(`${id}_field`);
+			});
 
-		toggleHidden("continue");
-		toggleHidden("create");
+			toggleHidden("continue");
+			toggleHidden("create");
+		}
 	};
 
 	const handleReturnClick = (event: MouseEvent) => {
@@ -107,7 +135,33 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 
 	const handleCreateClick = (event: MouseEvent) => {
 		event.preventDefault();
-		confirmCreate();
+
+		let credentialFieldsAreValid = true;
+		const usernameField = <HTMLInputElement>document.querySelector(`#login`);
+		if (!usernameField.reportValidity()) {
+			credentialFieldsAreValid = false;
+		}
+		const passwordField = <HTMLInputElement>document.querySelector(`#password`);
+		if (!passwordField.reportValidity()) {
+			credentialFieldsAreValid = false;
+		}
+		const repeatPasswordField = <HTMLInputElement>document.querySelector(`#repeat_password`);
+		if (repeatPasswordField.value !== passwordField.value) {
+			passwordField.setCustomValidity("Passwords must match");
+			repeatPasswordField.setCustomValidity("Passwords must match");
+			credentialFieldsAreValid = false;
+		}
+		else {
+			passwordField.setCustomValidity("");
+			repeatPasswordField.setCustomValidity("");
+		}
+		passwordField.reportValidity();
+		repeatPasswordField.reportValidity();
+
+		
+		if (credentialFieldsAreValid) {
+			confirmCreate();
+		}
 	};
 
 
@@ -127,7 +181,7 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 		const createButton =<HTMLButtonElement>document.querySelector("#create");
 		createButton.addEventListener("click", handleCreateClick);
 
-		credentialFields.map((id) => {
+		credentialFieldIds.map((id) => {
 			toggleHidden(`${id}_field`);		
 		});
 	};
