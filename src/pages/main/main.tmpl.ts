@@ -25,8 +25,8 @@ export const MainPage: Template<props> = ({
 	});
 	const newMessageField = InputField({
 		inputType: "text",
-		name: "newMessage",
-		id: "newMessage",
+		name: "message",
+		id: "message",
 		placeholder: "Message..."
 	});
 	const messages = messageProps.map(
