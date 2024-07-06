@@ -33,10 +33,11 @@
 		font-size: 12px;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		white-space: nowrap;
+
 
 		.text {
 			color: hsl(0deg 0% 50%);
-			white-space: nowrap;
 		}
 	}
 
