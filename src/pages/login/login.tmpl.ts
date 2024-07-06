@@ -86,7 +86,6 @@ export const LoginPage: Template<loginPageProps> = ({
 		const loginForm = <HTMLFormElement>document.querySelector("#loginForm");
 		loginForm.addEventListener("submit", handleFormSubmission);
 		
-		(<HTMLInputElement>document.querySelector("#login")).focus();
 	};
 
 	const onUnload = () => {
@@ -95,9 +94,6 @@ export const LoginPage: Template<loginPageProps> = ({
 				onUnload();
 			}
 		});
-
-		// const signInButton = <HTMLButtonElement>document.querySelector("#signIn");
-		// signInButton.removeEventListener("click", handleSignInClick);
 
 		const signUpButton = <HTMLButtonElement>document.querySelector("#signUp");
 		signUpButton.removeEventListener("click", handleSignUpClick);
