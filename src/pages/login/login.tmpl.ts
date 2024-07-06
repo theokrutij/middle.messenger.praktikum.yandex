@@ -1,7 +1,6 @@
 import { InputField, props as InputFieldProps } from "../../components/InputField/InputField.tmpl";
-import { printFormData, validateFields } from "../../modules /formActions";
+import { printFormData, validateFields } from "../../modules/formActions";
 import { Template } from "../../types";
-// import { handleFormSubmission } from "../../modules/formActions";
 
 import classes from "./login.module.css";
 

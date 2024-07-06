@@ -1,5 +1,5 @@
 import { InputField } from "../../components/InputField/InputField.tmpl";
-import { printFormData } from "../../modules /formActions";
+import { printFormData } from "../../modules/formActions";
 import { Template } from "../../types";
 
 import classes from "./signup.module.css";
