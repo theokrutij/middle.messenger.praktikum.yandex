@@ -14,8 +14,15 @@ export const MainPage: Template<props> = ({
 	messageProps
 }: props) => {
 	const chatCards = [
-		ChatCard(null),
-		ChatCard(null)
+		ChatCard({
+			name: "Real talk",
+			lastMessage: {
+				author: "Cicero",
+				text: "Lorem ipsum dolor sit aaaaaaaaaaaaaaaaaaaamet",
+				datetime: "Today, 12:00"
+			},
+			unreadCount: 3
+		}),
 	];
 	const searchField = InputField({
 		inputType: "text",
@@ -52,26 +59,42 @@ export const MainPage: Template<props> = ({
 					${messages.map(([template]) => template).join("\n")}
 				</div>
 				<div class=${classes.controls}>
-					<input 
-						type="text" 
-						name="message" 
-						id="message" 
-						placeholder="Message..."
-						class=${classes.message}
-					>
-					<button class=${classes["icon-button"]}><img class=${classes["send-button-icon"]} src="/send.svg" alt="sendButton"></button>
+					<form class=${classes.form}>
+						<input 
+							type="text" 
+							name="message" 
+							id="message" 
+							placeholder="Message..."
+							class=${classes.message}
+						>
+						<button class=${classes["icon-button"]} id="sendMessage"><img class=${classes["send-button-icon"]} src="/send.svg" alt="sendButton"></button>
+					</form>
 				</div>
 			</div>
 		</main>
 	`;
-
+	
+	const handleSendMessage = (event: MouseEvent) => {
+		event.preventDefault();
+;		const messageField = <HTMLInputElement>document.querySelector("#message");
+		if (messageField.value !== "") {
+			sendMessage(messageField.value);
+			messageField.value = "";
+		} 
+	};
 	const onLoad = () => {
-
+		const sendMessageButton = <HTMLButtonElement>document.querySelector("#sendMessage");
+		sendMessageButton.addEventListener("click", handleSendMessage);
 	};
 
 	const onUnload = () => {
-
+		const sendMessageButton = <HTMLButtonElement>document.querySelector("#sendMessage");
+		sendMessageButton.removeEventListener("click", handleSendMessage);
 	};
 
 	return [template, onLoad, onUnload];
+};
+
+const sendMessage = (message: string) => {
+	console.log(`New message sent: ${message}`);
 };
