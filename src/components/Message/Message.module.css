@@ -6,13 +6,18 @@
 	display: flex;
 	gap: 20px;
 	align-items: baseline;
+
+	.text {
+		font-size: 14px;
+	}
+
+	.datetime {
+		font-size: 10px;
+		color: hsl(0deg 0% 40%);
+	}
 }
 
-.text {
-	font-size: 14px;
-}
-
-.datetime {
-	font-size: 10px;
-	color: hsl(0deg 0% 40%);
+.own {
+	align-self: flex-end;
+	background-color: hsl(0deg 0% 65%);
 }

@@ -5,16 +5,18 @@ import classes from "./Message.module.css";
 
 export type props = {
 	text: string,
-	datetime: string
+	datetime: string,
+	own?: boolean
 }
 
 export const Message:Template<props> = ({
 	text,
-	datetime
+	datetime,
+	own = false
 }: props) => {
 	const template = 
 	`
-	<div class=${classes.message}>
+	<div class="${classes.message} ${own ? classes.own: ""}">
 		<span class=${classes.text}>${text}</span>
 		<span class=${classes.datetime}>${datetime}</span>
 	</div>
