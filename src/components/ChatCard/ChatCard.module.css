@@ -3,12 +3,12 @@
 	padding: 8px 12px;
 	gap: 12px;
 	display: grid;
-	grid-template-columns: auto 1fr auto;
+	grid-template-columns: auto 1fr auto auto;
 	grid-template-rows: 1fr 1fr;
 	/* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
 	grid-template-areas: 
-		"avatar name datetime"
-		"avatar lastMessage unreadCount"
+		"avatar name datetime datetime"
+		"avatar lastMessage lastMessage unreadCount"
 	;
 	row-gap: 0;
 	align-items: center;
@@ -31,9 +31,12 @@
 	.message {
 		grid-area: lastMessage;
 		font-size: 12px;
+		overflow: hidden;
+		text-overflow: ellipsis;
 
 		.text {
 			color: hsl(0deg 0% 50%);
+			white-space: nowrap;
 		}
 	}
 
