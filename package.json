@@ -6,7 +6,8 @@
     "dev": "vite --port 3000",
     "start": "tsc && vite build && node express_server.js",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "tsc --noEmit && npx stylelint 'src/**/*.css' && eslint 'src/**/*.ts'"
   },
   "engines": {
     "node": "20.x",
