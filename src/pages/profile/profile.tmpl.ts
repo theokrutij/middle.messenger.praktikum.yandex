@@ -1,6 +1,7 @@
 import { InputField, props as InputFieldProps } from "../../components/InputField/InputField.tmpl";
 import { printFormData, validateFields } from "../../modules/formActions";
 import { Template, User } from "../../types";
+import { hideModal, showModal } from "../../utils";
 
 import classes from "./profile.module.css";
 
@@ -104,20 +105,6 @@ export const ProfilePage: Template<props> = ({
 
 
 	return [template, onLoad, onUnload];
-};
-
-const showModal = (modalHTML: string, onLoad: () => void) => {
-	const modalLayer = <HTMLDivElement>document.querySelector("#modal-layer");
-	modalLayer.classList.toggle("hidden");
-	modalLayer.innerHTML = modalHTML;
-	onLoad();
-};
-
-const hideModal = (onUnload: () => void) => {
-	const modalLayer = <HTMLDivElement>document.querySelector("#modal-layer");
-	modalLayer.classList.toggle("hidden");
-	onUnload();
-	modalLayer.innerHTML = "";
 };
 
 type editModalProps = {

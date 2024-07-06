@@ -75,7 +75,7 @@ const renderMainPage = () => {
 		{
 			messageProps: [
 				{text: "Hey!", datetime: "Today, 12:00"},
-				{text: "Hey, how is it going?", datetime: "Today, 12:04", own: true}
+				{text: "Heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey, how is it going?", datetime: "Today, 12:04", own: true}
 			]
 		}
 	);
