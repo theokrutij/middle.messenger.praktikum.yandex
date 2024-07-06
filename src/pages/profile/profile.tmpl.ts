@@ -20,11 +20,23 @@ export const ProfilePage: Template<props> = ({
 	phone,
 	onClose
 }: props) => {
-	const openEditProfileModal = () => showModal(editProfileTemplate, editProfileOnLoad as () => void);
+	const openEditProfileModal = () => showModal(
+		editProfileTemplate, 
+		editProfileOnLoad as () => void, 
+		EditProfileOnUnload as () => void
+	);
 	const closeEditProfileModal = () => hideModal(EditProfileOnUnload as () => void);
-	const openChangeProfilePhotoModal = () => showModal(changeProfilePhotoTemplate, changeProfilePhotoOnLoad as () => void);
+	const openChangeProfilePhotoModal = () => showModal(
+		changeProfilePhotoTemplate, 
+		changeProfilePhotoOnLoad as () => void,
+		changeProfilePhotoOnUnload as () => void,
+	);
 	const closeChangeProfilePhotoModal = () => hideModal(changeProfilePhotoOnUnload as () => void);
-	const openEditPasswordModal = () => showModal(editPasswordTemplate, editPasswordOnLoad as () => void);
+	const openEditPasswordModal = () => showModal(
+		editPasswordTemplate, 
+		editPasswordOnLoad as () => void,
+		editPasswordOnUnload as () => void
+	);
 	const closeEditPasswordModal = () => hideModal(editPasswordOnUnload as () => void);
 
 
