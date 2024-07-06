@@ -11,6 +11,7 @@
 	}
 
 	.search-field-wrap {
+		padding-top: 9px;
 		width: 240px;
 	}
 
@@ -32,7 +33,7 @@
 	.sidebar {
 		display: flex;
 		flex-direction: column;
-		min-width: 400px;
+		min-width: 300px;
 		border-right: 1px solid hsl(0deg 0% 50%);		
 	}
 
