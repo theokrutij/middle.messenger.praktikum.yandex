@@ -1,4 +1,5 @@
 import { InputField, props as InputFieldProps } from "../../components/InputField/InputField.tmpl";
+import { printFormData, validateFields } from "../../modules /formActions";
 import { Template } from "../../types";
 // import { handleFormSubmission } from "../../modules/formActions";
 
@@ -57,21 +58,11 @@ export const LoginPage: Template<loginPageProps> = ({
 		`
 	;
 
-	// const handleSignInClick = (event: MouseEvent) => {
-	// 	event.preventDefault();
-	// 	goToMain();
-	// }; 
 	const handleFormSubmission = (event: SubmitEvent) => {
 		event.preventDefault();
-		let formIsValid = true;
-		inputFieldProps.forEach(({id}) => {
-			const inputElement = <HTMLInputElement>document.querySelector(`#${id}`);
-			const fieldIsValid = inputElement.reportValidity() ;
-			if (!fieldIsValid) {
-				formIsValid = false;
-			}
-		});
-		if (formIsValid) {
+		
+		if (validateFields(inputFieldProps.map(({id}) => id))) {
+			printFormData(event.target as HTMLFormElement);
 			goToMain();
 		}
 

@@ -1,4 +1,5 @@
 import { InputField, props as InputFieldProps } from "../../components/InputField/InputField.tmpl";
+import { printFormData, validateFields } from "../../modules /formActions";
 import { Template, User } from "../../types";
 
 import classes from "./profile.module.css";
@@ -133,16 +134,17 @@ const editModal: Template<editModalProps> = ({
 	const inputFields = inputFieldProps.map(
 		(props) => InputField(props)
 	);
+	const formId = title.replace(/\s/g, '') + "_form";
 	const template = 
 	`	
 		<div class=${classes["modal-window"]}>
 			<header class=${classes.header}>${title}</header>
-			<form class=${classes.form}>
+			<form class=${classes.form} id=${formId}>
 				<div class=${classes.fields}>
 					${inputFields.map(([template]) => template).join("\n")}
 				</div> 
 				<div class=${classes.controls}>
-					<button class=${classes.button} id="save">Save</button>
+					<button type="submit" class=${classes.button} id="save">Save</button>
 					<button class=${classes.button} id="cancel">Cancel</button>
 				</div>
 			</form>
@@ -150,39 +152,32 @@ const editModal: Template<editModalProps> = ({
 
 	`
 	;
+	const handleFormSubmit = (event: SubmitEvent) => {
+		event.preventDefault();
+		if (validateFields(inputFieldProps.map(({id}) => id))) {
+			printFormData(event.target as HTMLFormElement);
+			onClose();
+		}
+	};
 
 	const onLoad = () => {
 		inputFields.forEach(
 			([,onLoad]) => (onLoad as () => void)()
 		);
-		const saveButton = <HTMLButtonElement>document.querySelector("#save");
-		saveButton.addEventListener(
-			"click", (event) => {
-				event.preventDefault();
-				onClose();
-		});
 
 		const cancelButton = <HTMLButtonElement>document.querySelector("#cancel");
-		cancelButton.addEventListener(
-			"click", (event) => {
-				event.preventDefault();
-				onClose();
-		});
+		cancelButton.addEventListener("click", onClose);
+
+		const form = <HTMLFormElement>document.querySelector(`#${formId}`);
+		form.addEventListener("submit", handleFormSubmit);
 	};
 
 	const onUnload = () => {
-		const saveButton = <HTMLButtonElement>document.querySelector("#save");
-		saveButton.removeEventListener(
-			"click", (event) => {
-				event.preventDefault();
-				onClose();
-		});
 		const cancelButton = <HTMLButtonElement>document.querySelector("#cancel");
-		cancelButton.removeEventListener(
-			"click", (event) => {
-				event.preventDefault();
-				onClose();
-		});
+		cancelButton.removeEventListener("click", onClose);
+
+		const form = <HTMLFormElement>document.querySelector(`#${formId}`);
+		form.removeEventListener("submit", handleFormSubmit);
 	};
 
 	return [template, onLoad, onUnload];
@@ -336,4 +331,3 @@ const changeProfilePhoto: Template<{onClose: () => void}> = ({onClose}) => {
 
 	return [template, onLoad, onUnload];
 };
-

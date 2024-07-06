@@ -1,4 +1,5 @@
 import { InputField } from "../../components/InputField/InputField.tmpl";
+import { printFormData } from "../../modules /formActions";
 import { Template } from "../../types";
 
 import classes from "./signup.module.css";
@@ -160,6 +161,7 @@ export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate
 
 		
 		if (credentialFieldsAreValid) {
+			printFormData(event.target as HTMLFormElement);
 			confirmCreate();
 		}
 	};
