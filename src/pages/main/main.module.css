@@ -61,8 +61,14 @@
 			gap: 20px;
 
 
-			.new-message-wrap {
-				width: 400px;
+			.message {
+				height: 40px;
+				width: 350px;
+				padding: 0 12px;
+				border: 1px solid hsl(0deg 0% 20%);
+				border-radius: 12px;
+				outline: none;
+
 			}
 		}
 	}

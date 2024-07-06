@@ -23,12 +23,6 @@ export const MainPage: Template<props> = ({
 		id: "searchField",
 		placeholder: "Search..."
 	});
-	const newMessageField = InputField({
-		inputType: "text",
-		name: "message",
-		id: "message",
-		placeholder: "Message..."
-	});
 	const messages = messageProps.map(
 		(props) => Message(props)
 	);
@@ -58,9 +52,13 @@ export const MainPage: Template<props> = ({
 					${messages.map(([template]) => template).join("\n")}
 				</div>
 				<div class=${classes.controls}>
-					<div class=${classes["new-message-wrap"]}>
-						${newMessageField[0]}
-					</div>
+					<input 
+						type="text" 
+						name="message" 
+						id="message" 
+						placeholder="Message..."
+						class=${classes.message}
+					>
 					<button class=${classes["icon-button"]}><img class=${classes["send-button-icon"]} src="/send.svg" alt="sendButton"></button>
 				</div>
 			</div>
