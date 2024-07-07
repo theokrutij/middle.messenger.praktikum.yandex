@@ -4,6 +4,7 @@ import { IconButton } from "../../components/IconButton/IconButton.tmpl";
 import classes from "./profile.module.css";
 import { InputField } from "../../components/InputField/InputField.tmpl";
 import { hideModal, showModal } from "../../utils";
+import { printFormData } from "../../modules/formActions";
 
 
 type ProfilePageProps = DefaultProps & {
@@ -114,7 +115,7 @@ export class ProfilePage extends Block<ProfilePageProps> {
 
 type EditModalProps = DefaultProps & {
 	user: User,
-	onSave: (event: Event) => void,
+	onSave: (...args: unknown[]) => unknown,
 }
 
 class EditInfoModal extends Block<EditModalProps> {
@@ -211,7 +212,27 @@ class EditInfoModal extends Block<EditModalProps> {
 		const saveButton = new Block({
 			className: classes.button,
 			textContent: "Confirm",
-			events: {"click": this.props.onSave}
+			events: {
+				"click": (event) => {
+					event.preventDefault();
+
+					const fieldsAreValid = (
+						displayNameInputField.validate() &&
+						usernameInputField.validate() &&
+						firstNameInputField.validate() &&
+						secondNameInputField.validate() &&
+						emailInputField.validate() &&
+						phoneInputField.validate()
+					);
+
+					if (fieldsAreValid) {
+						const form = <HTMLFormElement>document.querySelector("#editInfoForm");
+						printFormData(form);
+
+						this.props.onSave(event);
+					}
+				}
+				}
 		}, "button");
 		const cancelButton = new Block({
 			className: classes.button,
@@ -287,7 +308,38 @@ class ChangePasswordModal extends Block<ChangePasswordModalProps> {
 		const saveButton = new Block({
 			className: classes.button,
 			textContent: "Confirm",
-			events: {"click": this.props.onSave}
+			events: {
+				"click": (event: Event) => {
+					event.preventDefault();
+					const passwordInput = <HTMLInputElement>passwordInputField.getContent().querySelector("input");
+					const repeatPasswordInput = <HTMLInputElement>repeatPasswordInputField.getContent().querySelector("input");
+
+					const passwordsMatch = passwordInput.value === repeatPasswordInput.value;
+					if (!passwordsMatch) {
+						passwordInput.setCustomValidity("Passwords must match");
+						repeatPasswordInput.setCustomValidity("Passwords must match");
+					}
+					else {
+						passwordInput.setCustomValidity("");
+						repeatPasswordInput.setCustomValidity("");
+					}
+					passwordInput.reportValidity();
+					repeatPasswordInput.reportValidity();
+
+					const fieldsAreValid =(
+						passwordInputField.validate() &&
+						repeatPasswordInputField.validate() &&
+						passwordsMatch
+					);
+
+					if (fieldsAreValid) {
+						const form = <HTMLFormElement>document.querySelector("#changePasswordForm");
+						printFormData(form);
+
+						this.props.onSave();
+					}
+				}
+			}
 		}, "button");
 		const cancelButton = new Block({
 			className: classes.button,
@@ -346,7 +398,14 @@ class ChangeAvatarModal extends Block<ChangeAvatarModalProps> {
 		const saveButton = new Block({
 			className: classes.button,
 			textContent: "Confirm",
-			events: {"click": this.props.onSave}
+			events: {
+				"click": () => {
+					const form = <HTMLFormElement>document.querySelector("#changeAvatarForm");
+					printFormData(form);
+
+					this.props.onSave();
+				} 
+			}
 		}, "button");
 		const cancelButton = new Block({
 			className: classes.button,
