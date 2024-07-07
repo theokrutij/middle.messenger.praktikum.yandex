@@ -141,7 +141,6 @@ document.addEventListener(
 	() => {
 		const modalLayer = <HTMLElement>document.querySelector("#modal-layer");
 		modalLayer.addEventListener("click", (event) => {
-			console.log("click");
 			if (event.target === event.currentTarget) {
 				modalLayer.innerHTML = "";
 				modalLayer.classList.add("hidden");
