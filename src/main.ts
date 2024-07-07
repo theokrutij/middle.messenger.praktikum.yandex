@@ -36,22 +36,6 @@ const state = {
 	user: DUMMY_USER
 };
 
-// const loadTemplate = <T extends props>(page: Template<T>, props: T) => {
-// 	state.unloadPreviousPage();
-// 	const [pageHTML, onLoad, onUnload] = page(props);
-// 	if (onUnload !== undefined) {
-// 		state.unloadPreviousPage = onUnload;
-// 	}
-// 	else {
-// 		state.unloadPreviousPage = () => {};
-// 	}
-// 	document.querySelector<HTMLDivElement>("#app")!.innerHTML = pageHTML;
-
-// 	if (onLoad !== undefined) {
-// 		onLoad();
-// 	}
-// };
-
 
 
 const loginPage = new LoginPage({
