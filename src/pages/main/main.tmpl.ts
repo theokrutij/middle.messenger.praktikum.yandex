@@ -8,6 +8,7 @@ import { showModal } from "../../utils";
 import { IconButton } from "../../components/IconButton/IconButton.tmpl";
 
 import classes from "./main.module.css";
+import { Form } from "../../components/Form/Form.tmpl";
 
 
 type MainPageProps = DefaultProps & {
@@ -66,10 +67,7 @@ export class MainPage extends Block<MainPageProps> {
 					}
 				</div>
 				<div class=${classes.controls}>
-					<form class=${classes.form}>
-						<div id="messageField"></div>
-						<div id="sendButton"></div>
-					</form>
+					<div id="messageForm"></div>
 				</div>
 			</div>
 		`;
@@ -132,28 +130,38 @@ export class MainPage extends Block<MainPageProps> {
 			className: classes.message
 		});
 		const sendButton = new IconButton({
+			id: "sendMessageButton",
 			url: "/send.svg",
 			alt: "sendButton",
 			iconClassName: classes["send-button-icon"],
+			className: classes["icon-button"],
 			events: {
-				"click": (event: Event) => {
+				"click": () => {}
+			}
+		});
+
+		const messageForm = new Form({
+			className: classes["message-form"],
+			inputFields: [messageField],
+			controls: [sendButton],
+			events: {
+				"submit": (event: Event) => {
 					event.preventDefault();
+
 					const messageInput = <HTMLInputElement>messageField.getContent().querySelector("input");
 					if (messageInput.value !== "") {
 						sendMessage(messageInput.value);
 						messageInput.value = "";
 					}
 				}
-			},
-			className: classes["icon-button"]
+			}
 		});
 		
 		const stubIdsToComponents = {
 			"optionsButton": burgerButton,
 			"searchField": searchField,
 			"chatOptionsButton": chatOptionsButton,
-			"messageField": messageField,
-			"sendButton": sendButton
+			"messageForm": messageForm
 		};
 		chatCards.forEach((chatCard) => {
 			Object.assign(stubIdsToComponents, {"ChatCard": chatCard});
@@ -163,7 +171,6 @@ export class MainPage extends Block<MainPageProps> {
 			const messageId = message.props.id;
 			Object.assign(stubIdsToComponents, {[messageId]: message});
 		});
-
 
 		return this.compile(
 			this.template(),
