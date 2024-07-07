@@ -1,8 +1,8 @@
 import { Block } from "./modules/Block";
-import { props } from "./types";
+import { DefaultProps } from "./types";
 
 
-export const renderBlock = <Props extends props>(query: string, block: Block<Props>) => {
+export const renderBlock = <Props extends DefaultProps>(query: string, block: Block<Props>) => {
 	const root = <HTMLElement>document.querySelector<HTMLDivElement>(query);
 	root.innerHTML = "";
 
@@ -11,9 +11,7 @@ export const renderBlock = <Props extends props>(query: string, block: Block<Pro
 	block.dispatchComponentDidMount();
 };
 
-
-
-export const showModal = (block: Block<props>) => {
+export const showModal = <Props extends DefaultProps>(block: Block<Props>) => {
 	const modalLayer = <HTMLDivElement>document.querySelector("#modal-layer");
 	modalLayer.classList.remove("hidden");
 
