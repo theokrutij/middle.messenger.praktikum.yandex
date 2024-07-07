@@ -1,34 +1,27 @@
-type State = {
-	onHide: ((event: MouseEvent) => void) | null
-} 
+import { Block } from "./modules/Block";
+import { props } from "./types";
 
-const state: State = {
-	onHide: null
+
+export const renderBlock = <Props extends props>(query: string, block: Block<Props>) => {
+	const root = <HTMLElement>document.querySelector<HTMLDivElement>(query);
+	root.innerHTML = "";
+
+	root.appendChild(block.getContent());
+
+	block.dispatchComponentDidMount();
 };
 
-export const showModal = (modalHTML: string, onLoad: () => void, onUnload: () => void) => {
+
+
+export const showModal = (block: Block<props>) => {
 	const modalLayer = <HTMLDivElement>document.querySelector("#modal-layer");
-	state.onHide = (event: MouseEvent) => {
-		if (event.target === event.currentTarget) {
-			hideModal(onUnload);
-		}
-	};
-	modalLayer.addEventListener(
-		"click", 
-		state.onHide
-	);
 	modalLayer.classList.remove("hidden");
-	modalLayer.innerHTML = modalHTML;
-	onLoad();
+
+	renderBlock("#modal-layer", block);
 };
 
-export const hideModal = (onUnload: () => void) => {
+export const hideModal = () => {
 	const modalLayer = <HTMLDivElement>document.querySelector("#modal-layer");
-	modalLayer.removeEventListener(
-		"click",
-		state.onHide as (event: MouseEvent) => void
-	);
 	modalLayer.classList.add("hidden");
-	onUnload();
 	modalLayer.innerHTML = "";
 };

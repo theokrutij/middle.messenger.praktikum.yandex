@@ -1,16 +1,16 @@
 import { Block } from "./modules/Block";
 
-type miscProps = {
-	[key: string]: string | number | boolean | (() => void) | props | props[] | null | Block<props>
-};
-
-export type props = miscProps & {
+type NamedProps = {
 	events?: {
-		[key: string]: (event: Event) => unknown;
+		[key: string]: (<T extends Event>(event: T) => unknown);
 	},
 	id?: string,
 	className?: string,
 	textContent?: string
+}
+
+export type props = NamedProps & {
+	[key: string]: string | number | boolean | ((event: Event | MouseEvent) => void) | props | props[] | null | Block<props>
 }
 
 export type Template<T extends props> = (

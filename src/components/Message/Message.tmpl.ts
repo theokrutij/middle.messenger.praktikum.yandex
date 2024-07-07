@@ -1,27 +1,35 @@
-import { Template } from "../../types";
-
+import { Block } from "../../modules/Block";
+import { props as propType } from "../../types";
 import classes from "./Message.module.css";
 
 
-export type props = {
+export type props = propType & {
 	text: string,
 	datetime: string,
-	own?: boolean
+	own?: boolean,
+	id: string
 }
 
-export const Message:Template<props> = ({
-	text,
-	datetime,
-	own = false
-}: props) => {
-	const template = 
-	`
-	<div class="${classes.message} ${own ? classes.own: ""}">
-		<span class=${classes.text}>${text}</span>
-		<span class=${classes.datetime}>${datetime}</span>
-	</div>
-	`
-	;
-	return [template];
-};
 
+export class Message extends Block<props> {
+	constructor(props: props) {
+		const className = `${classes.message} ${props.own ? classes.own: ""}`;
+		super({...props, className: className});
+
+
+	}
+	
+	template() {
+		const template = 
+		`
+			<span class=${classes.text}>${this.props.text}</span>
+			<span class=${classes.datetime}>${this.props.datetime}</span>
+		`;
+
+		return template;
+	}
+
+	render() {
+		return this.compile(this.template());
+	}
+};

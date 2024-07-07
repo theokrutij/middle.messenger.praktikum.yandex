@@ -37,7 +37,6 @@ button {
 	top: 0;
 	left: 0;
 	background-color: hsla(0deg 0% 0% / 30%);
-	overflow: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
