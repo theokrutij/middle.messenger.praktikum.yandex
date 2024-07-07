@@ -2,7 +2,8 @@
 	flex: 1;
 	height: 100%;
 	display: flex;
-
+	overflow: auto;
+	
 	.icon-button {
 		background-color: inherit;
 		display: flex;
@@ -33,7 +34,7 @@
 	.sidebar {
 		display: flex;
 		flex-direction: column;
-		width: 300px;
+		min-width: 300px;
 		border-right: 1px solid hsl(0deg 0% 50%);		
 	}
 
