@@ -16,6 +16,7 @@
 - `npm run dev` Запуск dev сервера vite 
 - `npm run build` Сборка проекта
 - `npm run start` Сборка проекта и запуск static сервера Express на порту :3000
+- `npm run lint` Запуск линтинга tsc, eslint и stylelint
 
 ### Макеты в фигме:
 https://www.figma.com/design/lY6kHJzFsl1nK3WsVRKC0i/ChatNoir?node-id=0-1&t=wEpRMxRttPinSlt1-1
@@ -23,6 +24,7 @@ https://www.figma.com/design/lY6kHJzFsl1nK3WsVRKC0i/ChatNoir?node-id=0-1&t=wEpRM
 ### Проект на netlify:
 Основная версия: https://chat-noir.netlify.app/
 <p>Деплой из ветки 1 спринта: https://sprint-1--chat-noir.netlify.app/</p>
+<p>Деплой из ветки 2 спринта: https://sprint-2--chat-noir.netlify.app/</p>
 
 
 ### URL сверстанных страниц:
