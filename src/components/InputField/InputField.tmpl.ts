@@ -83,6 +83,7 @@ class Input extends Block<InputProps> {
 		elem.name = this.props.name;
 		elem.id = this.props.id + "_input";
 		elem.placeholder = this.props.placeholder;
+
 		if (this.props.required !== undefined) {
 			elem.required = this.props.required;
 		}
@@ -94,6 +95,9 @@ class Input extends Block<InputProps> {
 		}
 		if (this.props.pattern !== undefined) {
 			elem.pattern = this.props.pattern;
+		}
+		if (this.props.initialValue !== undefined) {
+			elem.value = this.props.initialValue;
 		}
 	}
 };
