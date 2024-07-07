@@ -1,5 +1,6 @@
 import { Block } from "../../modules/Block";
 import { DefaultProps } from "../../types";
+import { IconButton } from "../IconButton/IconButton.tmpl";
 import { InputField } from "../InputField/InputField.tmpl";
 
 import classes from "./Form.module.css";
@@ -16,7 +17,7 @@ export type ButtonProps = Omit<DefaultProps, "id"> & {
 
 type FormProps = DefaultProps & {
 	inputFields: InputField[],
-	controls: Block<ButtonProps>[],
+	controls: (Block<ButtonProps> | IconButton)[],
 	events: {
 		"submit": (event: Event) => unknown
 	},
@@ -24,7 +25,10 @@ type FormProps = DefaultProps & {
 
 export class Form extends Block<FormProps> {
 	constructor(props: FormProps) {
-		super({...props, className: classes.form}, "form");
+		if (props.className === undefined) {
+			props.className = classes.form;
+		}
+		super(props, "form");
 	}
 
 	template() {
