@@ -1,9 +1,12 @@
+import { ButtonProps, Form } from "../../components/Form/Form.tmpl";
 import { InputField } from "../../components/InputField/InputField.tmpl";
 import { Block } from "../../modules/Block";
 import { printFormData } from "../../modules/formActions";
 import { DefaultProps } from "../../types";
 
 import classes from "./signup.module.css";
+import formClasses from "../../components/Form/Form.module.css";
+
 
 type SignUpProps = DefaultProps & {
 	returnToSignIn: () => void;
@@ -21,22 +24,7 @@ export class SignupPage extends Block<SignUpProps> {
 		`
 		<main class=${classes.page}>
 			<h1>Create new profile</h1>
-			<form class=${classes.form} id="signupForm">
-				<div class=${classes.fields}>
-					<div id="firstNameField"></div>
-					<div id="secondNameField"></div>
-					<div id="emailField"></div>
-					<div id="phoneField"></div>
-					<div id="loginField"></div>
-					<div id="passwordField"></div>
-					<div id="repeatPasswordField"></div>
-				</div>
-				<div class=${classes.controls}>
-					<div id="continueButton"></div>
-					<div id="createProfileButton"></div>
-					<div id="returnButton"></div>
-				</div>
-			</form>
+			<div id="signupForm"></div>
 		</main>
 		`;
 
@@ -114,54 +102,76 @@ export class SignupPage extends Block<SignUpProps> {
 			required: true
 		});
 		repeatPasswordInputField.hide();
+		const userInfoFields = [
+			firstNameInputField,
+			secondNameInputField,
+			emailInputField, 
+			phoneInputField
+		];
+		const credentialFields = [
+			usernameInputField,
+			passwordInputField,
+			repeatPasswordInputField
+		];
 
-		const continueButton = new Block({
+		const continueButton = new Block<ButtonProps>({
+			id: "continueButton",
 			textContent: "Continue",
-			className: classes.button,
+			className: formClasses.button,
 			events: {
-				"click": (event) => {
+				"click": (event: Event) => {
 					event.preventDefault();
 
-					const userInfoFieldsValid = (
-						firstNameInputField.validate() &&
-						secondNameInputField.validate() &&
-						emailInputField.validate() &&
-						phoneInputField.validate()
+					const userInfoFieldsValid = userInfoFields.reduce(
+						(flag, curr) => curr.validate() && flag,
+						true
 					);
 
 					if (userInfoFieldsValid) {
-						firstNameInputField.hide();
-						secondNameInputField.hide();
-						emailInputField.hide();
-						phoneInputField.hide();
-
-						usernameInputField.show();
-						passwordInputField.show();
-						repeatPasswordInputField.show();
-
+						userInfoFields.forEach((f) => f.hide());
+						credentialFields.forEach((f) => f.show());
 						continueButton.hide();
 						createProfileButton.show();
 					}
 				}
 			}
 		}, "button");
-		const returnButton = new Block({
+
+		const returnButton = new Block<ButtonProps>({
+			id: "returnButton",
 			textContent: "Return to sign in",
-			className: classes.button,
+			className: formClasses.button,
 			events: {
-				"click": (event) => {
+				"click": (event: Event) => {
 					event.preventDefault();
 					this.props.returnToSignIn();
 				}
 			}
 		}, "button");
 
-		const createProfileButton = new Block({
+		const createProfileButton = new Block<ButtonProps>({
+			id: "createProfileButton",
 			textContent: "Create profile",
-			className: classes.button,
+			className: formClasses.button,
+			events: {"click": () => {}}
+		}, "button");
+		createProfileButton.hide();
+
+		const signupForm = new Form({
+			inputFields: [
+				firstNameInputField, 
+				secondNameInputField,
+				emailInputField,
+				phoneInputField,
+				usernameInputField,
+				passwordInputField,
+				repeatPasswordInputField
+			],
+			controls: [continueButton, createProfileButton, returnButton],
 			events: {
-				"click": (event: Event) => {
+				"submit": (event: Event) => {
 					event.preventDefault(); 
+
 					const passwordInput = <HTMLInputElement>passwordInputField.getContent().querySelector("input");
 					const repeatedPasswordInput = <HTMLInputElement>repeatPasswordInputField.getContent().querySelector("input");
 
@@ -184,29 +194,19 @@ export class SignupPage extends Block<SignUpProps> {
 					);
 
 					if (credentialFieldsAreValid) {
-						const signupForm = <HTMLFormElement>document.querySelector("#signupForm");
-						printFormData(signupForm as HTMLFormElement);
+						printFormData(<HTMLFormElement>event.target);
 
 						this.props.confirmCreate();
 					}
 				}
 			}
-		}, "button");
-		createProfileButton.hide();
+
+		});
 
 		return this.compile(
 			this.template(), 
 			{
-				"firstNameField": firstNameInputField,
-				"secondNameField": secondNameInputField,
-				"emailField": emailInputField,
-				"phoneField": phoneInputField,
-				"loginField": usernameInputField,
-				"passwordField": passwordInputField,
-				"repeatPasswordField": repeatPasswordInputField,
-				"continueButton": continueButton,
-				"returnButton": returnButton,
-				"createProfileButton": createProfileButton
+				"signupForm": signupForm
 			}
 		);
 	}
