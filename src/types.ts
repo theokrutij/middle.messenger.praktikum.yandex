@@ -1,8 +1,19 @@
-export type props = {
-	[key: string]: string | number | boolean | (() => void) | props | props[] | null
-} | null
+import { Block } from "./modules/Block";
 
-export type Template<T extends props = null> = (
+type miscProps = {
+	[key: string]: string | number | boolean | (() => void) | props | props[] | null | Block<props>
+};
+
+export type props = miscProps & {
+	events?: {
+		[key: string]: (event: Event) => unknown;
+	},
+	id?: string,
+	className?: string,
+	textContent?: string
+}
+
+export type Template<T extends props> = (
 	props: T
 ) => [string, (() => void)?, (() => void)?];
 
