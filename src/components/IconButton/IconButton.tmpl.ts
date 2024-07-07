@@ -1,9 +1,9 @@
 import { Block } from "../../modules/Block";
-import { props as propType } from "../../types";
+import { DefaultProps} from "../../types";
 
 import classes from "./IconButton.module.css";
 
-type IconButtonProps = propType & {
+type IconButtonProps = DefaultProps & {
 	url: string;
 	alt: string;
 	iconClassName?: string;

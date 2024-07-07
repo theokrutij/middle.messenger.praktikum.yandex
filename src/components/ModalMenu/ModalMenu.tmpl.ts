@@ -1,6 +1,6 @@
 import { Block } from "../../modules/Block";
 import { hideModal } from "../../utils";
-import { props as propType } from "../../types";
+import { DefaultProps } from "../../types";
 
 import classes from "./ModalMenu.module.css";
 
@@ -10,7 +10,7 @@ type MenuOption = {
 	action: () => void,
 	critical?: boolean
 }
-type props = propType & {
+type props = DefaultProps & {
 	options: MenuOption[]
 }
 

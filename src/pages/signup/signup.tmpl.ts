@@ -1,10 +1,11 @@
 import { InputField } from "../../components/InputField/InputField.tmpl";
 import { Block } from "../../modules/Block";
 import { printFormData } from "../../modules/formActions";
+import { DefaultProps } from "../../types";
 
 import classes from "./signup.module.css";
 
-type signUpProps = {
+type SignUpProps = DefaultProps & {
 	returnToSignIn: () => void;
 	confirmCreate: () => void;
 }
@@ -214,8 +215,8 @@ type signUpProps = {
 // };
 
 
-export class SignupPage extends Block<signUpProps> {
-	constructor(props: signUpProps) {
+export class SignupPage extends Block<SignUpProps> {
+	constructor(props: SignUpProps) {
 		super(props);
 	}
 

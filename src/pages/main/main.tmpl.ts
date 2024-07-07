@@ -3,14 +3,14 @@ import { InputField } from "../../components/InputField/InputField.tmpl";
 import { Message, props as MessageProps } from "../../components/Message/Message.tmpl";
 import { ModalMenu } from "../../components/ModalMenu/ModalMenu.tmpl";
 import { Block } from "../../modules/Block";
-import { props as propType } from "../../types";
+import { DefaultProps } from "../../types";
 import { showModal } from "../../utils";
 import { IconButton } from "../../components/IconButton/IconButton.tmpl";
 
 import classes from "./main.module.css";
 
 
-type MainPageProps = propType & {
+type MainPageProps = DefaultProps & {
 	goToProfile: () => void,
 	logOut: () => void,
 	chats: {
@@ -267,7 +267,7 @@ export class MainPage extends Block<MainPageProps> {
 			alt: "sendButton",
 			iconClassName: classes["send-button-icon"],
 			events: {
-				"click": (event) => {
+				"click": (event: Event) => {
 					event.preventDefault();
 					const messageInput = <HTMLInputElement>messageField.getContent().querySelector("input");
 					if (messageInput.value !== "") {
@@ -279,7 +279,7 @@ export class MainPage extends Block<MainPageProps> {
 			className: classes["icon-button"]
 		});
 		
-		const stubIdsToComponents: {[key: string]: Block<propType>} = {
+		const stubIdsToComponents = {
 			"optionsButton": burgerButton,
 			"searchField": searchField,
 			"chatOptionsButton": chatOptionsButton,
@@ -287,12 +287,14 @@ export class MainPage extends Block<MainPageProps> {
 			"sendButton": sendButton
 		};
 		chatCards.forEach((chatCard) => {
-			stubIdsToComponents["ChatCard"] = chatCard;
+			Object.assign(stubIdsToComponents, {"ChatCard": chatCard});
+		});
+		
+		currentChatMessages.forEach((message) => {
+			const messageId = message.props.id;
+			Object.assign(stubIdsToComponents, {[messageId]: message});
 		});
 
-		currentChatMessages.forEach((message) => {
-			stubIdsToComponents[message.props.id] = message;
-		});
 
 		return this.compile(
 			this.template(),

@@ -1,4 +1,4 @@
-import { props as propsType } from "../types";
+import { DefaultProps } from "../types";
 import { EventBus } from "./EventBus";
 
 
@@ -10,7 +10,7 @@ enum EVENTS {
 }
 
 
-export class Block<Props extends propsType> {
+export class Block<Props extends DefaultProps> {
 	props: Props;
 	tagName: string;
 	id?: string;
@@ -40,7 +40,7 @@ export class Block<Props extends propsType> {
 	componentDidMount?(): void;
 	componentDidUpdate?(oldProps: Props, newProps: Props): boolean;
 
-	compile(template: string, childrenStubs: {[key: string]: Block<propsType>} = {}) {
+	compile(template: string, childrenStubs: {[key: string]: Block<DefaultProps>} = {}) {
 		const fragment = document.createElement("template");
 
 		fragment.innerHTML = template;
@@ -88,7 +88,7 @@ export class Block<Props extends propsType> {
 						throw new Error(`${prop} is private`);
 					}
 					else {
-						const val = target[prop];
+						const val: unknown = target[prop as keyof DefaultProps];
 						return typeof val === "function" ? val.bind(target) : val;
 					}
 				},

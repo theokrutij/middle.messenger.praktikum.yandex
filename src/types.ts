@@ -1,6 +1,4 @@
-import { Block } from "./modules/Block";
-
-type NamedProps = {
+export type DefaultProps = {
 	events?: {
 		[key: string]: (<T extends Event>(event: T) => unknown);
 	},
@@ -8,14 +6,6 @@ type NamedProps = {
 	className?: string,
 	textContent?: string
 }
-
-export type props = NamedProps & {
-	[key: string]: string | number | boolean | ((event: Event | MouseEvent) => void) | props | props[] | null | Block<props>
-}
-
-export type Template<T extends props> = (
-	props: T
-) => [string, (() => void)?, (() => void)?];
 
 export type User = {
 	username: string,

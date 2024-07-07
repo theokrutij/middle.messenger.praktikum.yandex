@@ -1,16 +1,15 @@
 // import { InputField, InputFieldProps as InputFieldProps } from "../../components/InputField/InputField.tmpl";
 import { Block } from "../../modules/Block";
 // import { printFormData, validateFields } from "../../modules/formActions";
-import { User } from "../../types";
+import { DefaultProps, User } from "../../types";
 // import { hideModal, showModal } from "../../utils";
 import { IconButton } from "../../components/IconButton/IconButton.tmpl";
-import { props as propType } from "../../types";
 import classes from "./profile.module.css";
 import { InputField } from "../../components/InputField/InputField.tmpl";
 import { hideModal, showModal } from "../../utils";
 
 
-type props = {
+type ProfilePageProps = DefaultProps & {
 	user: User,
 	onClose: () => void
 }
@@ -337,8 +336,8 @@ type props = {
 // };
 
 
-export class ProfilePage extends Block<props> {
-	constructor(props: props) {
+export class ProfilePage extends Block<ProfilePageProps> {
+	constructor(props: ProfilePageProps) {
 		super(props);
 	}
 
@@ -437,7 +436,7 @@ export class ProfilePage extends Block<props> {
 };
 
 
-type EditModalProps = propType & {
+type EditModalProps = DefaultProps & {
 	user: User,
 	onSave: (event: Event) => void,
 }
@@ -561,7 +560,7 @@ class EditInfoModal extends Block<EditModalProps> {
 };
 
 
-type ChangePasswordModalProps = propType & {
+type ChangePasswordModalProps = DefaultProps & {
 	onSave: () => void;
 }
 class ChangePasswordModal extends Block<ChangePasswordModalProps> {
@@ -633,7 +632,7 @@ class ChangePasswordModal extends Block<ChangePasswordModalProps> {
 }
 
 
-type ChangeAvatarModalProps = propType & {
+type ChangeAvatarModalProps = DefaultProps & {
 	onSave: () => void
 }
 class ChangeAvatarModal extends Block<ChangeAvatarModalProps> {

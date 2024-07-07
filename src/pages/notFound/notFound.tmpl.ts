@@ -1,9 +1,10 @@
 import { Block } from "../../modules/Block";
+import { DefaultProps } from "../../types";
 
 
 import classes from "./notFound.module.css";
 
-type Props = {
+type Props = DefaultProps & {
 	returnToMain: () => void
 }
 

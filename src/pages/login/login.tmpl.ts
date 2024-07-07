@@ -1,12 +1,13 @@
 import { InputField } from "../../components/InputField/InputField.tmpl";
 import { Block } from "../../modules/Block";
 import { printFormData } from "../../modules/formActions";
+import { DefaultProps } from "../../types";
 // import { Template } from "../../types";
 
 import classes from "./login.module.css";
 
 
-type loginPageProps = {
+type LoginPageProps = DefaultProps & {
 	goToSignUp: () => void,
 	goToMain: () => void
 }
@@ -107,8 +108,8 @@ type loginPageProps = {
 // };
 
 
-export class LoginPage extends Block<loginPageProps> {
-	constructor(props: loginPageProps) {
+export class LoginPage extends Block<LoginPageProps> {
+	constructor(props: LoginPageProps) {
 		super(props, "main");
 	}
 

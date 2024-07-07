@@ -1,10 +1,10 @@
-import { props } from "../../types";
 import { Block } from "../../modules/Block";
+import { DefaultProps } from "../../types";
 
 import classes from "./serverError.module.css";
 
-export class ServerErrorPage extends Block<props> {
-	constructor(props: props) {
+export class ServerErrorPage extends Block<DefaultProps> {
+	constructor(props: DefaultProps) {
 		super(props);
 	}
 

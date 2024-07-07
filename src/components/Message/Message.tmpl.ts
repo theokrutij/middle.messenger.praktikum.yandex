@@ -1,9 +1,9 @@
 import { Block } from "../../modules/Block";
-import { props as propType } from "../../types";
+import { DefaultProps } from "../../types";
 import classes from "./Message.module.css";
 
 
-export type props = propType & {
+export type props = DefaultProps & {
 	text: string,
 	datetime: string,
 	own?: boolean,

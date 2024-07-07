@@ -1,9 +1,10 @@
 import { Block } from "../../modules/Block";
+import { DefaultProps } from "../../types";
 
 import classes from "./ChatCard.module.css";
 
 
-type props = {
+type props = DefaultProps & {
 	name: string,
 	lastMessage: {
 		author: string,

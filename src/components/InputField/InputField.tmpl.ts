@@ -1,10 +1,10 @@
 import { Block } from "../../modules/Block";
-import { props } from "../../types";
+import { DefaultProps } from "../../types";
 // import { Template } from "../../types";
 import classes from "./InputField.module.css";
 
 
-type InputProps = props & {
+type InputProps = DefaultProps & {
 	inputType: "text" | "password" | "email" | "tel",
 	name: string,
 	id: string,
