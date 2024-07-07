@@ -1,9 +1,11 @@
+import { ButtonProps, Form } from "../../components/Form/Form.tmpl";
 import { InputField } from "../../components/InputField/InputField.tmpl";
 import { Block } from "../../modules/Block";
 import { printFormData } from "../../modules/formActions";
 import { DefaultProps } from "../../types";
 
 import classes from "./login.module.css";
+import formClasses from "../../components/Form/Form.module.css";
 
 
 type LoginPageProps = DefaultProps & {
@@ -22,16 +24,7 @@ export class LoginPage extends Block<LoginPageProps> {
 		`
 		<main class=${classes["login-page"]}>
 			<h1>Welcome to Chat Noir!</h1>
-			<form class=${classes.form} id="loginForm">
-				<div class=${classes.fields}>
-					<div id="loginField"></div>
-					<div id="passwordField"></div>
-				</div>
-				<div class=${classes.controls}>
-					<div id="loginButton"></div>
-					<div id="signUpButton"></div>
-				</div>
-			</form>
+			<div id="loginForm"></div>
 		</main>
 		`;
 		return template;
@@ -61,9 +54,10 @@ export class LoginPage extends Block<LoginPageProps> {
 			required: true
 		});
 
-		const loginButton = new Block({
+		const loginButton = new Block<ButtonProps>({
+			id: "loginButton",
 			textContent: "Sign in",
-			className: classes.button,
+			className: formClasses.button,
 			events: {
 				"click": (event: Event) => {
 			 		if (loginField.validate() && passwordField.validate()) {
@@ -76,9 +70,10 @@ export class LoginPage extends Block<LoginPageProps> {
 			}
 		}, "button");
 
-		const signUpButton = new Block({
+		const signUpButton = new Block<ButtonProps>({
+			id: "signupButton",
 			textContent: "Create account",
-			className: classes.button,
+			className: formClasses.button,
 			events: {
 				"click": (event: Event) => {
 					event.preventDefault();
@@ -87,13 +82,25 @@ export class LoginPage extends Block<LoginPageProps> {
 			}
 		}, "button");
 
+		const loginForm = new Form({
+			inputFields: [loginField, passwordField],
+			controls: [loginButton, signUpButton],
+			events: {
+				"submit": (event: Event) => {
+					event.preventDefault();
+					if (loginField.validate() && passwordField.validate()) {
+						printFormData(<HTMLFormElement>event.target);
+						this.props.goToMain();
+					}
+				}
+			}
+		});
+
 		return this.compile(
 			this.template(), 
 			{
-				"loginField": loginField, 
-				"passwordField": passwordField, 
-				"loginButton": loginButton,
-				"signUpButton": signUpButton,
-			});
+				"loginForm": loginForm
+			}
+		);
 	}
 };
