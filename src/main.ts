@@ -20,12 +20,12 @@ const DUMMY_USER: User = {
 };
 
 enum Pages {
-	login = "/login",
-	signup = "/signup",
-	main = "/",
+	login = "/",
+	signup = "/sign-up",
+	main = "/messenger",
+	profile = "/settings",
 	notFound = "/404",
 	serverError = "/500",
-	profile = "/profile"
 };
 
 const isValidPage = (page: string) =>  Object.values(Pages).includes(page as Pages);
