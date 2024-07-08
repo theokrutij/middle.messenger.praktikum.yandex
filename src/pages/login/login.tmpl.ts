@@ -59,14 +59,7 @@ export class LoginPage extends Block<LoginPageProps> {
 			textContent: "Sign in",
 			className: formClasses.button,
 			events: {
-				"click": (event: Event) => {
-			 		if (loginField.validate() && passwordField.validate()) {
-						event.preventDefault();
-						const loginForm = <HTMLFormElement>document.querySelector("#loginForm");
-						printFormData(loginForm as HTMLFormElement);
-						this.props.goToMain();
-					}
-				},
+				"click": () => {}
 			}
 		}, "button");
 
