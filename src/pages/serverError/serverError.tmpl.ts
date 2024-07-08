@@ -1,11 +1,16 @@
-import { Template } from "../../types";
+import { Block } from "../../modules/Block";
+import { DefaultProps } from "../../types";
 
 import classes from "./serverError.module.css";
 
+export class ServerErrorPage extends Block<DefaultProps> {
+	constructor(props: DefaultProps) {
+		super(props);
+	}
 
-export const serverErrorPage: Template<{}> = () => {
-	const template = 
-	`	
+	template() {
+		const template = 
+		`	
 		<main class=${classes.page}>
 			<h1 class=${classes.h1}>500</h1>
 			<h2 class=${classes.h2}>Something went wrong</h2>
@@ -13,13 +18,12 @@ export const serverErrorPage: Template<{}> = () => {
 			<a id="contactLink" href="">contact us</a> if the issue persists</p>
 		</main>
 
-	`
-	;
+		`;
 
-	const onLoad = () => {
-		const contactLink = <HTMLAnchorElement>document.querySelector("#contactLink");
-		contactLink.addEventListener("click", (event) => event.preventDefault());
-	};
+		return template;
+	}
 
-	return [template, onLoad]
-}
+	render() {
+		return this.compile(this.template());
+	}
+};

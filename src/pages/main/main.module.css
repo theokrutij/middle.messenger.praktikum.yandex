@@ -1,24 +1,112 @@
 .page {
+	flex: 1;
+	height: 100%;
 	display: flex;
-	flex-direction: column;
-	gap: 60px;
+	overflow: auto;
 	
-	p {
-		text-align: center;
+	.icon-button {
+		background-color: inherit;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	.nav {
+	.search-field-wrap {
+		padding-top: 9px;
+		width: 240px;
+	}
+
+	.header {
+		min-height: 80px;
 		display: flex;
+		align-items: center;
 		gap: 20px;
+		padding: 0 20px;
+		border-bottom: 1px solid hsl(0deg 0% 50%);
+		background-color: hsl(0deg 0% 90%);
 
-	
+		.icon-button {
+			height: 40px;
+			width: 40px;
+		}
+	}
 
-		.button {
-			outline: none;
-			padding: 12px 20px;
-			border-radius: 10px;
+	.sidebar {
+		display: flex;
+		flex-direction: column;
+		min-width: 300px;
+		border-right: 1px solid hsl(0deg 0% 50%);		
+	}
 
-			font-weight: 600;
+	.chat {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+
+		.title {
+			flex: 1;
+			text-align: center;
+			font-size: 18px;
+			font-weight: 500;
+		}
+
+		.messages {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			padding: 20px;
+			gap: 8px;
+		}
+
+		.controls {
+			background-color: hsl(0deg 0% 90%);
+			min-height: 80px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0 40px;
+			
+			.message {
+				padding-top: 9px;
+			}
+			
+			.message-form {
+				flex: 1;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: 20px;
+				padding-top: 9px;
+			}
+
 		}
 	}
 }
+
+.options {
+	position: fixed;
+	top: 60px;
+	left: 30px;
+}
+
+.chat-options {
+	position: fixed;
+	top: 60px;
+	right: 30px;
+}
+
+.send-button-icon {
+	height: 27px;
+	width: 30px;
+}
+
+.burger-icon {
+	height: 22px;
+	width: 26px;
+}
+
+.dots-icon {
+	height: 20px;
+	width: 6px;
+}
+

@@ -1,158 +1,213 @@
+import { ButtonProps, Form } from "../../components/Form/Form.tmpl";
 import { InputField } from "../../components/InputField/InputField.tmpl";
-import { Template } from "../../types";
+import { Block } from "../../modules/Block";
+import { printFormData } from "../../modules/formActions";
+import { DefaultProps } from "../../types";
 
 import classes from "./signup.module.css";
+import formClasses from "../../components/Form/Form.module.css";
 
-type signUpProps = {
+
+type SignUpProps = DefaultProps & {
 	returnToSignIn: () => void;
 	confirmCreate: () => void;
 }
 
-export const SignupPage: Template<signUpProps> = ({returnToSignIn, confirmCreate}: signUpProps) => {
-	const inputFields = [
-		InputField({
+
+export class SignupPage extends Block<SignUpProps> {
+	constructor(props: SignUpProps) {
+		super(props);
+	}
+
+	template() {
+		const template = 
+		`
+		<main class=${classes.page}>
+			<h1>Create new profile</h1>
+			<div id="signupForm"></div>
+		</main>
+		`;
+
+		return template;
+	}
+
+	render() {
+		const firstNameInputField = new InputField({
 			label: "First name", 
 			inputType: "text", 
 			name: "first_name", 
 			id: "first_name",
-			placeholder: "Enter your first name..."
-		}),
-		InputField({
+			placeholder: "Enter your first name...",
+			pattern: "^[A-ZА-Я][a-zA-Zа-яА-Я\\-]*$",
+			required: true
+		});
+		const secondNameInputField = new InputField({
 			label: "Last name",
 			inputType: "text", 
 			name: "second_name", 
 			id: "second_name",
-			placeholder: "Enter your last name..."
-		}),
-		InputField({
+			placeholder: "Enter your last name...",
+			pattern: "^[A-ZА-Я][a-zA-Zа-яА-Я\\-]*$",
+			required: true,
+		});
+		const emailInputField = new InputField({
 			label: "Email",
 			inputType: "email", 
 			name: "email", 
 			id: "email",
-			placeholder: "Enter your email address..."		
-		}),
-		InputField({
+			placeholder: "Enter your email address...",
+			required: true
+		});
+		const phoneInputField = new InputField({
 			label: "Phone",
-			inputType: "phone", 
+			inputType: "tel", 
 			name: "phone", 
 			id: "phone",
-			placeholder: "Enter your phone number..."		
-		}),
-		InputField({
+			placeholder: "Enter your phone number...",
+			minlength: 10,
+			maxlength: 15,
+			pattern: "^\\+?[0-9]+$",
+			required: true
+		});
+		const usernameInputField = new InputField({
 			label: "Username",
 			inputType: "text",
 			name: "login",
 			id: "login",
-			placeholder: "Enter your username..."
-		}),
-		InputField({
+			placeholder: "Enter your username...",
+			minlength: 3,
+			maxlength: 20,
+			pattern: "^[a-zA-Z0-9_\\-]*[a-zA-Z]+[a-zA-Z0-9_\\-]*$",
+			required: true
+		});
+		usernameInputField.hide();
+		const passwordInputField = new InputField({
 			label: "Password",
 			inputType: "password",
 			name: "password",
 			id: "password",
-			placeholder: "Enter your password..."
-		}),
-		InputField({
+			placeholder: "Enter your password...",
+			minlength: 8,
+			maxlength: 40,
+			pattern: "^(?=.*[A-Z])(?=.*\\d).+$",
+			required: true
+		});
+		passwordInputField.hide();
+		const repeatPasswordInputField = new InputField({
 			label: "Repeat password",
 			inputType: "password",
 			name: "repeat_password",
 			id: "repeat_password",
-			placeholder: "Repeat your password..."
-		})
-	];
-
-	const infoFields = ["first_name", "second_name", "email", "phone"];
-	const credentialFields= ["login", "password", "repeat_password"];
-
-
-	const template = 
-		`
-		<main class=${classes.signupPage}>
-			<h1>Create new profile</h1>
-			<form class=${classes.form} action="submit">
-				<div class=${classes.fields}>
-						${inputFields.map(([template]) => template).join("\n")}
-				</div>
-				<div class=${classes.controls}>
-					<button class=${classes.button} id="continue">Continue</button>
-					<button class="${classes.button} hidden" id="create">Create profile</button>
-					<button class=${classes.button} id="return">Return to sign in</button>
-				</div>
-			</form>
-		</main>
-		`
-	;
-
-
-
-
-	const handleContinueClick = (event: MouseEvent) => {
-		event.preventDefault();
-
-		infoFields.map((id) => {
-			toggleHidden(`${id}_field`);
+			placeholder: "Repeat your password...",
+			required: true
 		});
-		credentialFields.map((id) => {
-			toggleHidden(`${id}_field`);
-		});
+		repeatPasswordInputField.hide();
+		const userInfoFields = [
+			firstNameInputField,
+			secondNameInputField,
+			emailInputField, 
+			phoneInputField
+		];
+		const credentialFields = [
+			usernameInputField,
+			passwordInputField,
+			repeatPasswordInputField
+		];
 
-		toggleHidden("continue");
-		toggleHidden("create");
-	};
+		const continueButton = new Block<ButtonProps>({
+			id: "continueButton",
+			textContent: "Continue",
+			className: formClasses.button,
+			events: {
+				"click": (event: Event) => {
+					event.preventDefault();
 
-	const handleReturnClick = (event: MouseEvent) => {
-		event.preventDefault();
-		returnToSignIn();
-	};
+					const userInfoFieldsValid = userInfoFields.reduce(
+						(flag, curr) => curr.validate() && flag,
+						true
+					);
 
-	const handleCreateClick = (event: MouseEvent) => {
-		event.preventDefault();
-		confirmCreate();
-	};
-
-
-	const onLoad = () => {
-		inputFields.map(([,onLoad]) => {
-			if (onLoad !== undefined) {
-				onLoad();
+					if (userInfoFieldsValid) {
+						userInfoFields.forEach((f) => f.hide());
+						credentialFields.forEach((f) => f.show());
+						continueButton.hide();
+						createProfileButton.show();
+					}
+				}
 			}
-		});
+		}, "button");
 
-		const continueButton = <HTMLButtonElement>document.querySelector("#continue");
-		continueButton.addEventListener("click", handleContinueClick);
-
-		const returnButton = <HTMLButtonElement>document.querySelector("#return");
-		returnButton.addEventListener("click", handleReturnClick);
-
-		const createButton =<HTMLButtonElement>document.querySelector("#create");
-		createButton.addEventListener("click", handleCreateClick);
-
-		credentialFields.map((id) => {
-			toggleHidden(`${id}_field`);		
-		});
-	};
-
-	const onUnload = () => {
-		inputFields.map(([,,onUnload]) => {
-			if (onUnload !== undefined) {
-				onUnload();
+		const returnButton = new Block<ButtonProps>({
+			id: "returnButton",
+			textContent: "Return to sign in",
+			className: formClasses.button,
+			events: {
+				"click": (event: Event) => {
+					event.preventDefault();
+					this.props.returnToSignIn();
+				}
 			}
+		}, "button");
+
+		const createProfileButton = new Block<ButtonProps>({
+			id: "createProfileButton",
+			textContent: "Create profile",
+			className: formClasses.button,
+			events: {"click": () => {}}
+		}, "button");
+		createProfileButton.hide();
+
+		const signupForm = new Form({
+			inputFields: [
+				firstNameInputField, 
+				secondNameInputField,
+				emailInputField,
+				phoneInputField,
+				usernameInputField,
+				passwordInputField,
+				repeatPasswordInputField
+			],
+			controls: [continueButton, createProfileButton, returnButton],
+			events: {
+				"submit": (event: Event) => {
+					event.preventDefault(); 
+
+					const passwordInput = <HTMLInputElement>passwordInputField.getContent().querySelector("input");
+					const repeatedPasswordInput = <HTMLInputElement>repeatPasswordInputField.getContent().querySelector("input");
+
+					const passwordsMatch = passwordInput.value === repeatedPasswordInput.value;
+					if (!passwordsMatch) {
+						passwordInput.setCustomValidity("Passwords must match");
+						repeatedPasswordInput.setCustomValidity("Password must match");
+					}
+					else {
+						passwordInput.setCustomValidity("");
+						repeatedPasswordInput.setCustomValidity("");
+					}
+					passwordInputField.validate();
+					repeatPasswordInputField.validate();
+					
+					const credentialFieldsAreValid = (
+						usernameInputField.validate() &&
+						passwordInputField.validate() &&
+						passwordsMatch
+					);
+
+					if (credentialFieldsAreValid) {
+						printFormData(<HTMLFormElement>event.target);
+
+						this.props.confirmCreate();
+					}
+				}
+			}
+
 		});
 
-		const continueButton = <HTMLButtonElement>document.querySelector("#continue");
-		continueButton.removeEventListener("click", handleContinueClick);
-
-		const returnButton = <HTMLButtonElement>document.querySelector("#return");
-		returnButton.removeEventListener("click", handleReturnClick);
-
-		const createButton =<HTMLButtonElement>document.querySelector("#create");
-		createButton.removeEventListener("click", handleCreateClick);
-	}	
-	return [template, onLoad, onUnload];
-}
-
-
-const toggleHidden = (id: string) => {
-	const elem = <HTMLElement>document.querySelector(`#${id}`);
-	elem.classList.toggle("hidden");
-}
+		return this.compile(
+			this.template(), 
+			{
+				"signupForm": signupForm
+			}
+		);
+	}
+};

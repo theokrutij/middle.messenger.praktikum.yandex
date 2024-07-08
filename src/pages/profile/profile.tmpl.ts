@@ -1,283 +1,426 @@
-import { InputField } from "../../components/InputField/InputField.tmpl";
-import { Template, User } from "../../types";
-
+import { Block } from "../../modules/Block";
+import { DefaultProps, User } from "../../types";
+import { IconButton } from "../../components/IconButton/IconButton.tmpl";
 import classes from "./profile.module.css";
+import { InputField } from "../../components/InputField/InputField.tmpl";
+import { hideModal, showModal } from "../../utils";
+import { printFormData } from "../../modules/formActions";
 
 
-type props = User & {
+type ProfilePageProps = DefaultProps & {
+	user: User,
 	onClose: () => void
 }
 
-export const ProfilePage: Template<props> = ({
-	avatar_url,
-	username,
-	display_name,
-	first_name,
-	second_name,
-	email,
-	phone,
-	onClose
-}: props) => {
-	const openEditProfileModal = () => showModal(editProfileTemplate, editProfileOnLoad as () => void);
-	const closeEditProfileModal = () => hideModal(EditProfileOnUnload as () => void);
-	const openChangeProfilePhotoModal = () => showModal(changeProfilePhotoTemplate, changeProfilePhotoOnLoad as () => void);
-	const closeChangeProfilePhotoModal = () => hideModal(changeProfilePhotoOnUnload as () => void);
-	const openEditPasswordModal = () => showModal(editPasswordTemplate, editPasswordOnLoad as () => void);
-	const closeEditPasswordModal = () => hideModal(editPasswordOnUnload as () => void);
 
+export class ProfilePage extends Block<ProfilePageProps> {
+	constructor(props: ProfilePageProps) {
+		super(props);
+	}
 
-	const [editProfileTemplate, editProfileOnLoad, EditProfileOnUnload] = editProfile({onClose: closeEditProfileModal}); 
-	const [changeProfilePhotoTemplate, changeProfilePhotoOnLoad, changeProfilePhotoOnUnload] = changeProfilePhoto({onClose: closeChangeProfilePhotoModal});
-	const [editPasswordTemplate, editPasswordOnLoad, editPasswordOnUnload] = editPassword({onClose: closeEditPasswordModal});
-
-	const template = 
-	`	
+	template() {
+		const {username, avatarUrl, displayName, firstName, secondName, email, phone} = this.props.user;
+		const template = 
+		`	
 		<div class=${classes.wrapper}>
 			<header class=${classes.header}>
-				<button class=${classes.button} id="editInfo"><img src="/edit.svg" alt="editButton"></button>
+				<div id="editInfoButton"></div>
 				<h1 class=${classes.title}>Your profile</h1>
-				<button class=${classes.button} id="close"><img src="/close.svg" alt="closeButton"></button>
+				<div id="closeButton"></div>
 			</header>
 			<main class=${classes.main}>
-				<div class=${classes.usernameAvatar}>
+				<div class=${classes["username-avatar"]}>
 					<div class=${classes.avatar}>
-						<img class=${classes.avatarImage} src=${avatar_url} alt="User avatar">
-						<button class=${classes.button} id="changeProfilePhoto">Change photo</button>		
+						<img class=${classes["avatar-image"]} src=${avatarUrl} alt="User avatar">
+						<div id="changePhotoButton"></div>
 					</div>
-					<h2 class=${classes.username}>${display_name !== null ? display_name : username}</h2>
+					<h2 class=${classes.username}>${displayName !== null ? displayName : username}</h2>
 				</div>
-				<div class=${classes.userInfo}>
-					<div class=${classes.userInfoField}>
-						<h3 class=${classes.fieldName}>Name</h3><p class=${classes.fieldValue}>${first_name + " " + second_name}</p>
+				<div class=${classes.info}>
+					<div class=${classes.field}>
+						<h3 class=${classes["field-name"]}>Name</h3><p class=${classes["field-value"]}>${firstName + " " + secondName}</p>
 					</div>
 					<div class=${classes.delimiter}></div>
-					<div class=${classes.userInfoField}>
-						<h3 class=${classes.fieldName}>Email</h3><p class=${classes.fieldValue}>${email}</p>
+					<div class=${classes.field}>
+						<h3 class=${classes["field-name"]}>Email</h3><p class=${classes["field-value"]}>${email}</p>
 					</div>
 					<div class=${classes.delimiter}></div>
-					<div class=${classes.userInfoField}>
-						<h3 class=${classes.fieldName}>Phone</h3><p class=${classes.fieldValue}>${phone}</p>
+					<div class=${classes.field}>
+						<h3 class=${classes["field-name"]}>Phone</h3><p class=${classes["field-value"]}>${phone}</p>
 					</div>
 				</div>
-				<button class=${classes.button} id="changePassword">Change password</button>
+				<div id="changePasswordButton"></div>
 			</main>
 		</div>
-		<div id="modalLayer" class="${classes.modalLayer} hidden"></div>
+		`;
+		return template;
+	}
 
-	`
-	;
-
-	const onLoad = () => {
-		const closeButton = <HTMLButtonElement>document.querySelector("#close");
-		closeButton.addEventListener("click", onClose);
-
-		const editButton = <HTMLButtonElement>document.querySelector("#editInfo");
-		editButton.addEventListener("click", openEditProfileModal);
-
-		const changeProfilePhotoButton = <HTMLButtonElement>document.querySelector("#changeProfilePhoto");
-		changeProfilePhotoButton.addEventListener("click", openChangeProfilePhotoModal);
-
-		const changePasswordButton = <HTMLButtonElement>document.querySelector("#changePassword");
-		changePasswordButton.addEventListener("click", openEditPasswordModal);
-	};
-
-	const onUnload = () => {
-		const closeButton = <HTMLButtonElement>document.querySelector("#close");
-		closeButton.removeEventListener("click", onClose);
-
-		const editButton = <HTMLButtonElement>document.querySelector("#editInfo");
-		editButton.removeEventListener("click", openEditProfileModal);
-
-		const changeProfilePhotoButton = <HTMLButtonElement>document.querySelector("#changeProfilePhoto");
-		changeProfilePhotoButton.removeEventListener("click", openChangeProfilePhotoModal);
-
-		const changePasswordButton = <HTMLButtonElement>document.querySelector("#changePassword");
-		changePasswordButton.removeEventListener("click", openEditPasswordModal);
-	};
-
-
-	return [template, onLoad, onUnload];
-};
-
-const showModal = (modalHTML: string, onLoad: () => void) => {
-	const modalLayer = <HTMLDivElement>document.querySelector("#modalLayer");
-	modalLayer.classList.toggle("hidden");
-	modalLayer.innerHTML = modalHTML;
-	onLoad();
-};
-
-const hideModal = (onUnload: () => void) => {
-	const modalLayer = <HTMLDivElement>document.querySelector("#modalLayer");
-	modalLayer.classList.toggle("hidden");
-	onUnload();
-	modalLayer.innerHTML = "";
-};
-
-type editModalProps = {
-	title: string,
-	inputFieldsAsHTML: string,
-	onClose: () => void
-};
-
-const editModal: Template<editModalProps> = ({
-	title,
-	onClose,
-	inputFieldsAsHTML
-}: editModalProps) => {
-	const template = 
-	`	
-		<div class=${classes.modalWindow}>
-			<header class=${classes.header}>${title}</header>
-			<form class=${classes.form}>
-				${inputFieldsAsHTML}
-				<div class=${classes.controls}>
-					<button class=${classes.button} id="save">Save</button>
-					<button class=${classes.button} id="cancel">Cancel</button>
-				</div>
-			</form>
-		</div>
-
-	`
-	;
-
-	const onLoad = () => {
-		const saveButton = <HTMLButtonElement>document.querySelector("#save");
-		saveButton.addEventListener(
-			"click", (event) => {
-				event.preventDefault();
-				onClose();
+	render() {
+		const editInfoButton = new IconButton({
+			url: "/edit.svg",
+			alt: "editInfoButton",
+			events: {
+				"click": () => showModal(editInfoModal)
+			}
 		});
-
-		const cancelButton = <HTMLButtonElement>document.querySelector("#cancel");
-		cancelButton.addEventListener(
-			"click", (event) => {
-				event.preventDefault();
-				onClose();
+		const closeButton = new IconButton({
+			url: "/close.svg",
+			alt: "closeButton",
+			events: {
+				"click": this.props.onClose
+			}
 		});
-	};
+		const changePhotoButton = new Block({
+			textContent: "Change photo",
+			className: classes.button,
+			events: {
+				"click": () => showModal(changeAvatarModal)
+			}
+		}, "button");
+		const changePasswordButton = new Block({
+			textContent: "Change password",
+			className: classes.button,
+			events: {
+				"click": () => showModal(changePasswordModal)
+			}
 
-	const onUnload = () => {
-		const saveButton = <HTMLButtonElement>document.querySelector("#save");
-		saveButton.removeEventListener(
-			"click", (event) => {
-				event.preventDefault();
-				onClose();
+		}, "button");
+		const editInfoModal = new EditInfoModal({
+			user: this.props.user,
+			onSave: hideModal,
+			className: classes["modal-window"]
 		});
-		const cancelButton = <HTMLButtonElement>document.querySelector("#cancel");
-		cancelButton.removeEventListener(
-			"click", (event) => {
-				event.preventDefault();
-				onClose();
+		const changeAvatarModal = new ChangeAvatarModal({
+			onSave: hideModal,
+			className: classes["modal-window"]
 		});
-	};
+		const changePasswordModal = new ChangePasswordModal({
+			onSave: hideModal,
+			className: classes["modal-window"]
+		});
+		return this.compile(
+			this.template(),
+			{
+				"editInfoButton": editInfoButton,
+				"closeButton": closeButton,
+				"changePhotoButton": changePhotoButton,
+				"changePasswordButton": changePasswordButton
+			}
 
-	return [template, onLoad, onUnload];
+		);
+	}
 };
 
-const editProfile: Template<{onClose: () => void}> = ({onClose}) => {
-	const inputFields = [
-		InputField({
-			label: "Username", 
-			inputType: "text", 
-			name: "login", 
-			id: "login",
-			placeholder: "Enter new username..."
-		}),
-		InputField({
+
+type EditModalProps = DefaultProps & {
+	user: User,
+	onSave: (...args: unknown[]) => unknown,
+}
+
+class EditInfoModal extends Block<EditModalProps> {
+	constructor(props: EditModalProps) {
+		super({...props});
+	}
+
+	template () {
+		const template = 
+		`
+		<header class=${classes.header}>Edit profile</header>
+		<form class=${classes.form} id="editInfoForm">
+			<div class=${classes.fields}>
+				<div id="displayName"></div>
+				<div id="username"></div>
+				<div id="firstName"></div>
+				<div id="secondName"></div>
+				<div id="email"></div>
+				<div id="phone"></div>
+			</div> 
+			<div class=${classes.controls}>
+				<div id="saveButton"></div>
+				<div id="cancelButton"></div>
+			</div>
+		</form>
+		`;
+		
+		return template;
+	}
+
+	render() {
+		const displayNameInputField = new InputField({
 			label: "Display name", 
 			inputType: "text", 
 			name: "display_name", 
 			id: "display_name",
-			placeholder: "Enter new display name..."
-		}),
-		InputField({
-			label: "First name",
+			placeholder: "Enter new display name...",
+			initialValue: this.props.user.displayName ? this.props.user.displayName : ""
+		});
+		const usernameInputField = new InputField({
+			label: "Username",
 			inputType: "text",
-			name: "first_name",
+			name: "login",
+			id: "login",
+			placeholder: "Enter your username...",
+			minlength: 3,
+			maxlength: 20,
+			pattern: "^[a-zA-Z0-9_\\-]*[a-zA-Z]+[a-zA-Z0-9_\\-]*$",
+			required: true,
+			initialValue: this.props.user.username
+		});
+		const firstNameInputField = new InputField({
+			label: "First name", 
+			inputType: "text", 
+			name: "first_name", 
 			id: "first_name",
-			placeholder: "Enter new first name..."
-		}),
-		InputField({
+			placeholder: "Enter your first name...",
+			pattern: "^[A-ZА-Я][a-zA-Zа-яА-Я\\-]*$",
+			required: true,
+			initialValue: this.props.user.firstName
+		});
+		const secondNameInputField = new InputField({
 			label: "Last name",
 			inputType: "text", 
 			name: "second_name", 
 			id: "second_name",
-			placeholder: "Enter new last name..."
-		}),
-		InputField({
+			placeholder: "Enter your last name...",
+			pattern: "^[A-ZА-Я][a-zA-Zа-яА-Я\\-]*$",
+			required: true,
+			initialValue: this.props.user.secondName
+		});
+		const emailInputField = new InputField({
 			label: "Email",
 			inputType: "email", 
 			name: "email", 
 			id: "email",
-			placeholder: "Enter new email address..."		
-		}),
-		InputField({
+			placeholder: "Enter your email address...",
+			required: true,
+			initialValue: this.props.user.email
+		});
+		const phoneInputField = new InputField({
 			label: "Phone",
-			inputType: "phone", 
+			inputType: "tel", 
 			name: "phone", 
 			id: "phone",
-			placeholder: "Enter new phone number..."		
-		}),
-	];
-	const [template, onLoad, onUnload] = editModal({
-		title: "Edit profile",
-		inputFieldsAsHTML: inputFields.map(([template]) => template).join("\n"), 
-		onClose: onClose
-	});
+			placeholder: "Enter your phone number...",
+			minlength: 10,
+			maxlength: 15,
+			pattern: "^\\+?[0-9]+$",
+			required: true,
+			initialValue: this.props.user.phone
+		});
 
-	return [template, onLoad, onUnload];
+		const saveButton = new Block({
+			className: classes.button,
+			textContent: "Confirm",
+			events: {
+				"click": (event) => {
+					event.preventDefault();
+
+					const fieldsAreValid = (
+						displayNameInputField.validate() &&
+						usernameInputField.validate() &&
+						firstNameInputField.validate() &&
+						secondNameInputField.validate() &&
+						emailInputField.validate() &&
+						phoneInputField.validate()
+					);
+
+					if (fieldsAreValid) {
+						const form = <HTMLFormElement>document.querySelector("#editInfoForm");
+						printFormData(form);
+
+						this.props.onSave(event);
+					}
+				}
+				}
+		}, "button");
+		const cancelButton = new Block({
+			className: classes.button,
+			textContent: "Cancel",
+			events: {"click": () => hideModal()}
+		}, "button");
+
+		return this.compile(
+			this.template(),
+			{
+				"displayName": displayNameInputField,
+				"username": usernameInputField,
+				"firstName": firstNameInputField,
+				"secondName": secondNameInputField,
+				"email": emailInputField,
+				"phone": phoneInputField,
+				"saveButton": saveButton,
+				"cancelButton": cancelButton
+			}
+		);
+	}
 };
 
-const editPassword: Template<{onClose: () => void}> = ({onClose}) => {
-	const inputFields = [
-		InputField({
-			label: "Old password",
-			inputType: "password",
-			name: "oldPassword",
-			id: "oldPassword",
-			placeholder: "Enter your current password..."
-		}),
-		InputField({
-			label: "New password",
-			inputType: "password",
-			name: "newPassword",
-			id: "newPassword",
-			placeholder: "Enter new password..."
-		}),
-		InputField({
-			label: "New password (repeat)",
-			inputType: "password",
-			name: "repeatNewPassword",
-			id: "repeatNewPassword",
-			placeholder: "Repeat new password..."
-		})
 
-	];
-	const [template, onLoad, onUnload] = editModal({
-		title: "Edit password",
-		inputFieldsAsHTML: inputFields.map(([template]) => template).join("\n"), 
-		onClose: onClose
-	});
+type ChangePasswordModalProps = DefaultProps & {
+	onSave: () => void;
+}
+class ChangePasswordModal extends Block<ChangePasswordModalProps> {
+	constructor(props: ChangePasswordModalProps) {
+		super(props);
+	}
 
-	return [template, onLoad, onUnload];
-};
+	template() {
+		const template = 
+		`
+		<header class=${classes.header}>Change password</header>
+		<form class=${classes.form} id="changePasswordForm">
+			<div class=${classes.fields}>
+				<div id="passwordField"></div>
+				<div id="repeatPasswordField"></div>
+			</div> 
+			<div class=${classes.controls}>
+				<div id="saveButton"></div>
+				<div id="cancelButton"></div>
+			</div>
+		</form>
+		`;
 
-const changeProfilePhoto: Template<{onClose: () => void}> = ({onClose}) => {
-	const inputFields = [
-		InputField({
+		return template;
+	}
+
+	render() {
+		const passwordInputField = new InputField({
+			label: "Password",
+			inputType: "password",
+			name: "password",
+			id: "password",
+			placeholder: "Enter new password...",
+			minlength: 8,
+			maxlength: 40,
+			pattern: "^(?=.*[A-Z])(?=.*\\d).+$",
+			required: true
+		});
+		const repeatPasswordInputField = new InputField({
+			label: "Repeat password",
+			inputType: "password",
+			name: "repeat_password",
+			id: "repeat_password",
+			placeholder: "Repeat new password...",
+			required: true
+		});
+
+		const saveButton = new Block({
+			className: classes.button,
+			textContent: "Confirm",
+			events: {
+				"click": (event: Event) => {
+					event.preventDefault();
+					const passwordInput = <HTMLInputElement>passwordInputField.getContent().querySelector("input");
+					const repeatPasswordInput = <HTMLInputElement>repeatPasswordInputField.getContent().querySelector("input");
+
+					const passwordsMatch = passwordInput.value === repeatPasswordInput.value;
+					if (!passwordsMatch) {
+						passwordInput.setCustomValidity("Passwords must match");
+						repeatPasswordInput.setCustomValidity("Passwords must match");
+					}
+					else {
+						passwordInput.setCustomValidity("");
+						repeatPasswordInput.setCustomValidity("");
+					}
+					passwordInput.reportValidity();
+					repeatPasswordInput.reportValidity();
+
+					const fieldsAreValid =(
+						passwordInputField.validate() &&
+						repeatPasswordInputField.validate() &&
+						passwordsMatch
+					);
+
+					if (fieldsAreValid) {
+						const form = <HTMLFormElement>document.querySelector("#changePasswordForm");
+						printFormData(form);
+
+						this.props.onSave();
+					}
+				}
+			}
+		}, "button");
+		const cancelButton = new Block({
+			className: classes.button,
+			textContent: "Cancel",
+			events: {"click": () => hideModal()}
+		}, "button");
+
+		return this.compile(
+			this.template(),
+			{
+				"passwordField": passwordInputField,
+				"repeatPasswordField": repeatPasswordInputField,
+				"saveButton": saveButton,
+				"cancelButton": cancelButton
+			}
+		);
+	}
+}
+
+
+type ChangeAvatarModalProps = DefaultProps & {
+	onSave: () => void
+}
+class ChangeAvatarModal extends Block<ChangeAvatarModalProps> {
+	constructor(props: ChangeAvatarModalProps) {
+		super(props);
+	}
+
+	template() {
+		const template = 
+		`
+		<header class=${classes.header}>Change avatar</header>
+		<form class=${classes.form} id="changeAvatarForm">
+			<div class=${classes.fields}>
+				<div id="newAvatarUrl"></div>
+			</div> 
+			<div class=${classes.controls}>
+				<div id="saveButton"></div>
+				<div id="cancelButton"></div>
+			</div>
+		</form>
+		`;
+	
+		return template;
+	}
+
+	render() {
+		const newAvatarUrlInputField = new InputField({
 			label: "New avatar URL", 
 			inputType: "text", 
 			name: "avatar", 
 			id: "avatar",
 			placeholder: "Paste link to your new avatar..."
-		})
-	];
-	const [template, onLoad, onUnload] = editModal({
-		title: "Change profile photo",
-		inputFieldsAsHTML: inputFields.map(([template]) => template).join("\n"), 
-		onClose: onClose
-	});
+		});
 
-	return [template, onLoad, onUnload];
+		const saveButton = new Block({
+			className: classes.button,
+			textContent: "Confirm",
+			events: {
+				"click": () => {
+					const form = <HTMLFormElement>document.querySelector("#changeAvatarForm");
+					printFormData(form);
+
+					this.props.onSave();
+				} 
+			}
+		}, "button");
+		const cancelButton = new Block({
+			className: classes.button,
+			textContent: "Cancel",
+			events: {"click": () => hideModal()}
+		}, "button");
+
+		return this.compile(
+			this.template(),
+			{
+				"newAvatarUrl": newAvatarUrlInputField,
+				"saveButton": saveButton,
+				"cancelButton": cancelButton
+			}
+		);
+	}
+
 };
-

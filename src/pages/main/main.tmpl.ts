@@ -1,70 +1,182 @@
-import { Template } from "../../types"
+import { ChatCard } from "../../components/ChatCard/ChatCard.tmpl";
+import { InputField } from "../../components/InputField/InputField.tmpl";
+import { Message, props as MessageProps } from "../../components/Message/Message.tmpl";
+import { ModalMenu } from "../../components/ModalMenu/ModalMenu.tmpl";
+import { Block } from "../../modules/Block";
+import { DefaultProps } from "../../types";
+import { showModal } from "../../utils";
+import { IconButton } from "../../components/IconButton/IconButton.tmpl";
 
 import classes from "./main.module.css";
+import { Form } from "../../components/Form/Form.tmpl";
 
 
-type props = {
-	goToLogin: () => void,
-	goToSignUp: () => void,
-	goToError404: () => void,
-	goToError500: () => void,
+type MainPageProps = DefaultProps & {
 	goToProfile: () => void,
+	logOut: () => void,
+	chats: {
+		name: string,
+		lastMessage: {
+			author: string,
+			text: string,
+			datetime: string
+		},
+		unreadCount: 3
+	}[],
+	currenChatMessages: MessageProps[]
 }
 
-export const MainPage: Template<props> = ({
-	goToLogin,
-	goToSignUp,
-	goToError404,
-	goToError500,
-	goToProfile
-}: props) => {
-	const template = 
-	`
-		<main class=${classes.page}>
-			<p>Main page will be here</p>
-			<nav class=${classes.nav}>
-				<button class=${classes.button} id="login">Login page</button>
-				<button class=${classes.button} id="signup">Signup page</button>
-				<button class=${classes.button} id="error404">404 error page</button>
-				<button class=${classes.button} id="error500">500 error page</button>
-				<button class=${classes.button} id="profile">Profile</button>
-			</nav>
-		</main>
-	`;
+const sendMessage = (message: string) => {
+	console.log(`New message sent: ${message}`);
+};
 
-	const onLoad = () => {
-		const loginButton = <HTMLButtonElement>document.querySelector("#login");
-		loginButton.addEventListener("click", goToLogin);
 
-		const signupButton = <HTMLButtonElement>document.querySelector("#signup");
-		signupButton.addEventListener("click", goToSignUp);
-
-		const error404Button = <HTMLButtonElement>document.querySelector("#error404");
-		error404Button.addEventListener("click", goToError404);
-
-		const error500Button = <HTMLButtonElement>document.querySelector("#error500");
-		error500Button.addEventListener("click", goToError500);
-
-		const profileButton = <HTMLButtonElement>document.querySelector("#profile");
-		profileButton.addEventListener("click", goToProfile);
+export class MainPage extends Block<MainPageProps> {
+	constructor(props: MainPageProps) {
+		super({...props, className: classes.page}, "main");
 	}
 
-	const onUnload = () => {
-		const loginButton = <HTMLButtonElement>document.querySelector("#login");
-		loginButton.removeEventListener("click", goToLogin);
-
-		const signupButton = <HTMLButtonElement>document.querySelector("#signup");
-		signupButton.removeEventListener("click", goToSignUp);
-
-		const error404Button = <HTMLButtonElement>document.querySelector("#error404");
-		error404Button.removeEventListener("click", goToError404);
-
-		const error500Button = <HTMLButtonElement>document.querySelector("#error500");
-		error500Button.removeEventListener("click", goToError500);
-
-		const profileButton = <HTMLButtonElement>document.querySelector("#profile");
-		profileButton.removeEventListener("click", goToProfile);
+	template() {
+		const template = 
+		`
+			<div class=${classes.sidebar}>
+				<header class=${classes.header}>
+					<div id="optionsButton"></div>
+					<div class=${classes["search-field-wrap"]}>
+						<div id="searchField"></div>
+					</div>
+				</header>
+				<div>
+					${
+						this.props.chats.map(
+							() => `<div id="ChatCard"></div>`
+						).join("\n")
+					}
+				</div>
+			</div>
+			<div class=${classes.chat}>
+				<header class=${classes.header}>
+					<h2 class=${classes.title}>Chat name</h2>
+					<div id="chatOptionsButton"></div>
+				</header>
+				<div class=${classes.messages}>
+					${
+						this.props.currenChatMessages.map(
+							({id}) => `<div id=${id}></div>`
+						).join("\n")
+					}
+				</div>
+				<div class=${classes.controls}>
+					<div id="messageForm"></div>
+				</div>
+			</div>
+		`;
+		return template;
 	}
 
-	return [template, onLoad, onUnload];
-}
+	render() {
+		const optionsMenu = new ModalMenu({
+			className: classes.options,
+			options: [
+				{title: "Profile", action: this.props.goToProfile, critical: false},
+				{title: "Log out", action: this.props.logOut, critical: true}
+			],
+
+		});
+		const burgerButton = new IconButton({
+			url: "/burger.svg",
+			alt: "optionsButton",
+			iconClassName: classes["burget-icon"],
+			events: {
+				"click": () => showModal(optionsMenu)
+			},
+			className: classes["icon-button"]
+		});
+		const searchField = new InputField({
+			inputType: "text",
+			name: "search",
+			id: "searchField",
+			placeholder: "Search..."
+		});
+		const chatOptionsMenu = new ModalMenu({
+			className: classes["chat-options"],
+			options: [
+				{title: "Archive chat", action: () => {}, critical: true}
+			]
+		});
+		const chatOptionsButton = new IconButton({
+			url: "/chatMenu.svg",
+			alt: "chatOptionsButton",
+			iconClassName: classes["dots-icon"],
+			events: {
+				"click": () => showModal(chatOptionsMenu)
+			},
+			className: classes["icon-button"]
+		});
+		const chatCards = this.props.chats.map(
+			(chatCardProps) => new ChatCard(chatCardProps)
+		);
+
+		const currentChatMessages = this.props.currenChatMessages.map(
+			(messageProps) => new Message({
+				...messageProps,
+			})
+		);
+		const messageField = new InputField({
+			inputType: "text",
+			name: "message",
+			id: "message",
+			placeholder: "Message...",
+			className: classes.message
+		});
+		const sendButton = new IconButton({
+			id: "sendMessageButton",
+			url: "/send.svg",
+			alt: "sendButton",
+			iconClassName: classes["send-button-icon"],
+			className: classes["icon-button"],
+			events: {
+				"click": () => {}
+			}
+		});
+
+		const messageForm = new Form({
+			className: classes["message-form"],
+			inputFields: [messageField],
+			controls: [sendButton],
+			events: {
+				"submit": (event: Event) => {
+					event.preventDefault();
+
+					const messageInput = <HTMLInputElement>messageField.getContent().querySelector("input");
+					if (messageInput.value !== "") {
+						sendMessage(messageInput.value);
+						messageInput.value = "";
+					}
+				}
+			}
+		});
+		
+		const stubIdsToComponents = {
+			"optionsButton": burgerButton,
+			"searchField": searchField,
+			"chatOptionsButton": chatOptionsButton,
+			"messageForm": messageForm
+		};
+		chatCards.forEach((chatCard) => {
+			Object.assign(stubIdsToComponents, {"ChatCard": chatCard});
+		});
+		
+		currentChatMessages.forEach((message) => {
+			const messageId = message.props.id;
+			Object.assign(stubIdsToComponents, {[messageId]: message});
+		});
+
+		return this.compile(
+			this.template(),
+			stubIdsToComponents
+		);	
+	}
+};
+
+

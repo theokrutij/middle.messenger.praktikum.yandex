@@ -1,29 +1,48 @@
-import { Template } from "../../types";
+import { Block } from "../../modules/Block";
+import { DefaultProps } from "../../types";
+
 
 import classes from "./notFound.module.css";
 
-type props = {
-	returnToMainPage: () => void;
+type Props = DefaultProps & {
+	returnToMain: () => void
 }
 
-export const notFoundPage: Template<props> = ({returnToMainPage}: props) => {
-	const template = 
-	`
+
+export class NotFoundPage extends Block<Props> {
+	static returnButtonId = "returnButton";
+	constructor(props: Props) {
+		super({...props});
+	}
+
+	template() {
+		const template = 
+		`
 		<main class=${classes.page}>
 			<h1 class=${classes.h1}>404</h1>
 			<h2 class=${classes.h2}>Sorry, this page doesn't exist</h2>
-			<button class=${classes.button} id="return">Return to main page</button>
+			<div id=${NotFoundPage.returnButtonId}></div>
 		</main>
-	`
-	;
+		`;
 
-	const onLoad = () => {
-		const returnButton = <HTMLButtonElement>document.querySelector("#return");
-		returnButton.addEventListener(
-			"click",
-			returnToMainPage
-		);
+		return template;
 	}
 
-	return [template, onLoad]
-}
+	render() {
+		const returnButton = new Block(
+			{
+				id: NotFoundPage.returnButtonId,
+				className: classes.button,
+				textContent: "Return to main page",
+				events: {
+					"click": this.props.returnToMain
+				}
+			},
+			"button",
+		);
+
+
+		return this.compile(this.template(), {[NotFoundPage.returnButtonId]: returnButton});
+	}
+};
+

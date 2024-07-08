@@ -1,19 +1,20 @@
 import { LoginPage } from "./pages/login/login.tmpl";
 import { SignupPage } from "./pages/signup/signup.tmpl";
 import { MainPage } from "./pages/main/main.tmpl";
-import { notFoundPage } from "./pages/notFound/notFound.tmpl";
-import { serverErrorPage } from "./pages/serverError/serverError.tmpl";
+import { NotFoundPage } from "./pages/notFound/notFound.tmpl";
+import { ServerErrorPage } from "./pages/serverError/serverError.tmpl";
 import { ProfilePage } from "./pages/profile/profile.tmpl";
-import { Template, User, props } from "./types";
+import { User } from "./types";
 
 import "./global.css";
+import { renderBlock } from "./utils";
 
 const DUMMY_USER: User = {
 	username: "JD",
-	first_name: "John",
-	second_name: "Dorian",
-	display_name: null,
-	avatar_url: null,
+	firstName: "John",
+	secondName: "Dorian",
+	displayName: null,
+	avatarUrl: null,
 	email: "jd_md@yandex.ru",
 	phone: "+7(800)5553535"
 };
@@ -27,81 +28,84 @@ enum Pages {
 	profile = "/profile"
 };
 
+const isValidPage = (page: string) =>  Object.values(Pages).includes(page as Pages);
+
 const state = {
 	currentPage: Pages.login,
 	unloadPreviousPage: () => {},
 	user: DUMMY_USER
 };
 
-const loadTemplate = <T extends props>(page: Template<T>, props: T) => {
-	state.unloadPreviousPage();
-	const [pageHTML, onLoad, onUnload] = page(props);
-	if (onUnload !== undefined) {
-		state.unloadPreviousPage = onUnload;
-	}
-	else {
-		state.unloadPreviousPage = () => {}
-	}
-	document.querySelector<HTMLDivElement>("#app")!.innerHTML = pageHTML;
 
-	if (onLoad !== undefined) {
-		onLoad();
-	}
-}
 
+const loginPage = new LoginPage({
+	goToSignUp: () => navigateToPage(Pages.signup),
+	goToMain: () => navigateToPage(Pages.main)
+});
 const renderLogInPage = () => {
-	loadTemplate(
-		LoginPage, 
-		{
-			goToSignUp: () => navigateToPage(Pages.signup),
-			goToMain: () => navigateToPage(Pages.main)
-		}
-	);
-	// window.location.href = "/login";
+	renderBlock("#app", loginPage);
 };
+
+const signupPage = new SignupPage({
+	returnToSignIn: () => navigateToPage(Pages.login),
+	confirmCreate: () => navigateToPage(Pages.main)
+});
 const renderSignUpPage = () => {
-	loadTemplate(
-		SignupPage, 
-		{
-			returnToSignIn: () => navigateToPage(Pages.login),
-			confirmCreate: () => navigateToPage(Pages.main)
-		}
-	);
+	renderBlock("#app", signupPage);
 };
+
+const mainPage = new MainPage({
+	goToProfile: () => navigateToPage(Pages.profile),
+	logOut: () => navigateToPage(Pages.login),
+	chats: [
+		{
+			name: "Real talk",
+			lastMessage: {
+				author: "You",
+				text: "Hey",
+				datetime: "Today, 12:04"
+			},
+			unreadCount: 3
+		},
+	],
+	currenChatMessages: [
+		{
+			text: "heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey",
+			datetime: "Today, 12:03",
+			id: "lkaiqurq12123"	
+		},
+		{
+			text: "hey",
+			datetime: "Today, 16:20",
+			id: "ut3asd",
+			own: true
+		}
+
+	]
+});
 const renderMainPage = () => {
-	loadTemplate(
-		MainPage,
-		{
-			goToLogin: () => navigateToPage(Pages.login),
-			goToSignUp: () => navigateToPage(Pages.signup),
-			goToError404: () => navigateToPage(Pages.notFound),
-			goToError500: () => navigateToPage(Pages.serverError),
-			goToProfile: () => navigateToPage(Pages.profile)
-		}
-	);
+	renderBlock("#app", mainPage);
 };
+const notFoundPage = new NotFoundPage({returnToMain: () => {console.log("return to main"); navigateToPage(Pages.main);}});
 const renderNotFoundPage = () => {
-	loadTemplate(
-		notFoundPage, 
-		{
-			returnToMainPage: () => navigateToPage(Pages.main),
-		}
-	);
+	renderBlock("#app", notFoundPage);
 };
+
+const serverErrorPage = new ServerErrorPage({});
 const renderServerErrorPage = () => {
-	loadTemplate(serverErrorPage, {});
+	renderBlock("#app", serverErrorPage);
 };
+
+const profilePage = new ProfilePage({
+	user: state.user,
+	onClose: () => navigateToPage(Pages.main)
+});
 const renderProfilePage = () => {
-	loadTemplate(
-		ProfilePage,
-		{
-			...state.user,
-			onClose: () => navigateToPage(Pages.main)
-		}
-	);
+	renderBlock("#app", profilePage);
 };
 
 const renderPage = (page: string) => {
+	state.currentPage = isValidPage(page) ? page as Pages : Pages.notFound;
 	switch (page) {
 		case Pages.login:
 			renderLogInPage();
@@ -124,25 +128,30 @@ const renderPage = (page: string) => {
 		default:
 			renderNotFoundPage();
 	}
-}
+};
 
 const navigateToPage = (page: Pages) => {
 	window.history.pushState({page: page}, "", page);
 	renderPage(page);
-	state.currentPage = page;
 };
 
 
 document.addEventListener(
 	"DOMContentLoaded",
 	() => {
+		const modalLayer = <HTMLElement>document.querySelector("#modal-layer");
+		modalLayer.addEventListener("click", (event) => {
+			if (event.target === event.currentTarget) {
+				modalLayer.innerHTML = "";
+				modalLayer.classList.add("hidden");
+			} 
+		});
 		const pageInWindowState = window.history.state !== null && "page" in window.history.state;
-		const locationPathIsValidPage = Object.values(Pages).includes(window.location.pathname as Pages);
 
 		if (pageInWindowState) {
 			state.currentPage = window.history.state["page"];	
 		}
-		else if (locationPathIsValidPage) {
+		else if (isValidPage(window.location.pathname)) {
 			state.currentPage = window.location.pathname as Pages;
 		}
 		else {
