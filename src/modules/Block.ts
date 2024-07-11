@@ -10,7 +10,7 @@ enum EVENTS {
 }
 
 
-export class Block<Props extends DefaultProps> {
+export class Block<Props extends DefaultProps = DefaultProps> {
 	props: Props;
 	tagName: string;
 	id?: string;
