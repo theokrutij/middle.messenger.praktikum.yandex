@@ -23,13 +23,13 @@ class Route<PropsType extends DefaultProps> {
 	render() {
 		if (this._block === null) {
 			this._block = new this._blockClass(this._props);
+
+			if (this._block.render === undefined) {
+				throw new Error(`Render not defined for block ${this._blockClass}`);
+			}
 		}
 
-		if (this._block.render === undefined) {
-			throw new Error(`Render not defined for block ${this._blockClass}`);
-		}
-
-		return this._block.render();
+		return this._block.getContent();
 	}
 
 	leave() {
@@ -78,6 +78,15 @@ export class Router {
 		this._onRoute(pathname);
 	}
 
+	start() {
+		window.addEventListener(
+			"popstate",
+			() => this._onRoute(window.location.pathname)
+		);
+
+		this._onRoute(window.location.pathname);
+	}
+
 	private _getRoute(pathname: string) {
 		return this._routes.find(route => route.match(pathname));
 	}
@@ -94,10 +103,10 @@ export class Router {
 		}
 
 		this._currentRoute = route;
-		this._renderDocFragment(route.render());
+		this._renderBlock(route.render());
 	}
 
-	private _renderDocFragment(frag: DocumentFragment) {
+	private _renderBlock(frag: HTMLElement) {
 		const rootElement = <HTMLElement>document.querySelector(this._rootElementQuery);
 
 		rootElement.innerHTML = "";
