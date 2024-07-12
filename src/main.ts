@@ -10,6 +10,7 @@ import { Router } from "./modules/Router";
 
 
 import "./global.css";
+import { NotFoundPage } from "./pages/notFound/notFound.tmpl";
 
 const DUMMY_USER: User = {
 	username: "JD",
@@ -29,7 +30,8 @@ enum ROUTES {
 	LOGIN = "/",
 	SIGNUP = "/sign-up",
 	MAIN = "/messenger",
-	PROFILE = "/settings"
+	PROFILE = "/settings",
+	NOT_FOUND = "/404"
 };
 
 const router = new Router("#app");
@@ -89,6 +91,12 @@ router
 	{
 		user: state.user,
 		onClose: () => router.go(ROUTES.MAIN)
+	}
+)
+.useAsNotFoundPage(
+	NotFoundPage,
+	{
+		returnToMain: () => router.go(ROUTES.MAIN)
 	}
 );
 

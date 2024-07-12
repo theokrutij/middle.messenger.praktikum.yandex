@@ -46,6 +46,8 @@ export class Router {
 	private __instance: Router | null = null;
 	private _rootElementQuery: string;
 
+	private _notFoundPath = "404";
+
 	constructor(rootElementQuery: string) {
 		if (this.__instance !== null) {
 			this._routes = this.__instance._routes;
@@ -66,6 +68,10 @@ export class Router {
 		this._routes.push(route);
 
 		return this;
+	}
+
+	useAsNotFoundPage<PropsType extends DefaultProps>(blockClass: typeof Block<PropsType>, props: PropsType) {
+		this.use(this._notFoundPath, blockClass, props);
 	}
 
 	go(pathname: string) {
@@ -92,18 +98,24 @@ export class Router {
 	}
 
 	private _onRoute(pathname: string) {
-		const route = this._getRoute(pathname);
-
-		if (route === undefined) {
-			return;
-		}
-
 		if (this._currentRoute !== null) {
 			this._currentRoute.leave();
 		}
 
-		this._currentRoute = route;
-		this._renderBlock(route.render());
+		const route = this._getRoute(pathname);
+
+		if (route === undefined) {
+			const notFoundRoute = this._getRoute(this._notFoundPath);
+			if (notFoundRoute === undefined) {
+				throw new Error("unknown URL was requested, but 404 page is not implemented");
+			}
+			this._currentRoute = notFoundRoute;
+		}
+		else {
+			this._currentRoute = route;
+		}
+
+		this._renderBlock(this._currentRoute.render());
 	}
 
 	private _renderBlock(frag: HTMLElement) {
