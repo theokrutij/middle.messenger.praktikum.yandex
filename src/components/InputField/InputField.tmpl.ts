@@ -83,6 +83,7 @@ class Input extends Block<InputProps> {
 		elem.name = this.props.name;
 		elem.id = this.props.id + "_input";
 		elem.placeholder = this.props.placeholder;
+		elem.autocomplete = "off";
 
 		if (this.props.required !== undefined) {
 			elem.required = this.props.required;
